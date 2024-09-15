@@ -5,7 +5,7 @@ using UnityEngine;
 public class BrickManager : MonoBehaviour
 {
     [SerializeField] private List<GameObject> ObjectsList = new List<GameObject>();
-    private CameraRelativePositionManager positionManager = new CameraRelativePositionManager();
+    private IRelativePositionManager positionManager;
     private IJumper jumper;
 
     [SerializeField] private float nextObjectHeight;
@@ -14,12 +14,11 @@ public class BrickManager : MonoBehaviour
 
     private void Awake()
     {
+        positionManager = new JumperRelativePositionManager(ObjectsList);
         positionManager.Boundries = boundries;
-        positionManager.NextObjectHeight = nextObjectHeight;
-        positionManager.OffsetUnder = offsetUnder;
-        positionManager.ObjectsList = ObjectsList;
+        positionManager.NextObjectDelta = nextObjectHeight;
+        positionManager.MoveOffset = offsetUnder;
         positionManager.MovedObject += disableCollider;
-        positionManager.Start();
     }
 
     private void Start()
@@ -28,14 +27,13 @@ public class BrickManager : MonoBehaviour
     }
     void Update()
     {
-        positionManager.MoveObjectUp();
+        positionManager.MoveObject();
         enableColliders();
     }
 
     private void disableCollider(GameObject brick)
     {
         brick.GetComponent<Collider2D>().enabled = false;
-        Debug.Log("World");
     }
 
     private void enableColliders()

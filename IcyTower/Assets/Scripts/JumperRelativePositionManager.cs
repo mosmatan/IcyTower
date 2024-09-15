@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraRelativePositionManager
+public class JumperRelativePositionManager : IRelativePositionManager
 {
     private Queue<GameObject> objects = new Queue<GameObject>();
 
@@ -12,26 +12,30 @@ public class CameraRelativePositionManager
 
     public event Action<GameObject> MovedObject;
 
-    public List<GameObject> ObjectsList { get; set; }
-    public float NextObjectHeight { get; set; } = 0;
-    public float OffsetUnder { get; set; } = 0;
+    private List<GameObject> objectsList;
+    public float NextObjectDelta { get; set; } = 0;
+    public float MoveOffset { get; set; } = 0;
     public float Boundries { get; set; } = 0;
 
-    public GameObject CurrentObject => currentObject;
+    public JumperRelativePositionManager(List<GameObject> objectsList)
+    {
+        this.objectsList = objectsList;
+        initialize();
+    }
 
-    public void Start()
+    private void initialize()
     {
         jumper = GameObject.FindAnyObjectByType<Jumper>();
         listToQueue();
         currentObject = objects.Dequeue();
     }
 
-    public void MoveObjectUp()
+    public void MoveObject()
     {
-        if (currentObject.transform.position.y <= jumper.MaxHeight - OffsetUnder)
+        if (currentObject.transform.position.y <= jumper.MaxHeight - MoveOffset)
         {
             float xPosition = UnityEngine.Random.Range(-Boundries, Boundries);
-            currentObject.transform.position = new Vector3(xPosition, currentObject.transform.position.y + NextObjectHeight, currentObject.transform.position.z);
+            currentObject.transform.position = new Vector3(xPosition, currentObject.transform.position.y + NextObjectDelta, currentObject.transform.position.z);
             objects.Enqueue(currentObject);
             currentObject = objects.Dequeue();
             OnMovedObject();
@@ -40,7 +44,7 @@ public class CameraRelativePositionManager
 
     private void listToQueue()
     {
-        foreach (var brick in ObjectsList)
+        foreach (var brick in objectsList)
         {
             objects.Enqueue(brick);
         }

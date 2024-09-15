@@ -1,6 +1,5 @@
 using Assets.Scripts;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public abstract class SelectableItem : MonoBehaviour, ISelectableItem
 {
