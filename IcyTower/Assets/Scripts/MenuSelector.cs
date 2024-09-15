@@ -6,8 +6,33 @@ public class MenuSelector : MonoBehaviour
     [SerializeField] private List<SelectableItem> menuItems = new List<SelectableItem>();
 
     private int index = 0;
+    public bool isActive { get; set; } = true;
+
+    private void Start()
+    {
+        if(GameManager.Instance.SceneMenu == null)
+        {
+            GameManager.Instance.SceneMenu = this;
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (GameManager.Instance.SceneMenu == this)
+        {
+            GameManager.Instance.SceneMenu = null;
+        }
+    }
 
     private void Update()
+    {
+        if (isActive)
+        {
+            menu();
+        }
+    }
+
+    private void menu()
     {
         if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
         {
