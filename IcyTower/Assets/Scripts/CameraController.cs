@@ -28,4 +28,5 @@ public class CameraController : MonoBehaviour
             SceneManager.LoadScene(0);
         }
     }
+
 }

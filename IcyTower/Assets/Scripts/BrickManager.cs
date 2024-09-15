@@ -1,49 +1,51 @@
 using Assets.Scripts;
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
-public class BrickManager : Singleton<BrickManager>
+public class BrickManager : MonoBehaviour
 {
-    [SerializeField] List<GameObject> bricksArr = new List<GameObject>();
-    private Queue<GameObject> bricks = new Queue<GameObject>();
-
+    [SerializeField] private List<GameObject> ObjectsList = new List<GameObject>();
+    private CameraRelativePositionManager positionManager = new CameraRelativePositionManager();
     private IJumper jumper;
-    GameObject currentBrick;
 
-    [SerializeField] private float nextBrickHeigh = 10;
-    [SerializeField] private float offsetNotUnder = 6;
+    [SerializeField] private float nextObjectHeight;
+    [SerializeField] private float offsetUnder;
+    [SerializeField] private int boundries;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
+    {
+        positionManager.Boundries = boundries;
+        positionManager.NextObjectHeight = nextObjectHeight;
+        positionManager.OffsetUnder = offsetUnder;
+        positionManager.ObjectsList = ObjectsList;
+        positionManager.MovedObject += disableCollider;
+        positionManager.Start();
+    }
+
+    private void Start()
     {
         jumper = GameObject.FindAnyObjectByType<Jumper>();
-        listToQueue();
-        currentBrick = bricks.Dequeue();
     }
-
-    // Update is called once per frame
     void Update()
     {
-        if (currentBrick.transform.position.y <= jumper.MaxHeight - offsetNotUnder)
-        {
-            moveBrickUp();
-        }
+        positionManager.MoveObjectUp();
+        enableColliders();
     }
 
-    private void moveBrickUp()
+    private void disableCollider(GameObject brick)
     {
-        currentBrick.transform.Translate(transform.position + (new Vector3(0, nextBrickHeigh, 0)));
-        bricks.Enqueue(currentBrick);
-        currentBrick = bricks.Dequeue();
+        brick.GetComponent<Collider2D>().enabled = false;
+        Debug.Log("World");
     }
 
-    private void listToQueue()
+    private void enableColliders()
     {
-        foreach (var brick in bricksArr)
+        foreach (GameObject brick in ObjectsList)
         {
-            bricks.Enqueue(brick);
+            if(jumper.MaxHeight >= brick.transform.position.y)
+            {
+                brick.GetComponent<Collider2D>().enabled = true;
+            }
         }
     }
 }
