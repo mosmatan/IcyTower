@@ -18,31 +18,59 @@ public class BrickManager : MonoBehaviour
         positionManager.Boundries = boundries;
         positionManager.NextObjectDelta = nextObjectHeight;
         positionManager.MoveOffset = offsetUnder;
-        positionManager.MovedObject += disableCollider;
+        positionManager.MovedObject += HandleMovedObject;
     }
 
     private void Start()
     {
-        jumper = GameObject.FindAnyObjectByType<Jumper>();
+        jumper = GameObject.FindObjectOfType<Jumper>();
+        DisableAllColliders();
     }
+
     void Update()
     {
         positionManager.MoveObject();
-        enableColliders();
+        EnableCollidersBasedOnPosition();
     }
 
-    private void disableCollider(GameObject brick)
+    private void HandleMovedObject(GameObject brick)
     {
-        brick.GetComponent<Collider2D>().enabled = false;
+        DisableCollider(brick);
     }
 
-    private void enableColliders()
+    private void DisableAllColliders()
     {
         foreach (GameObject brick in ObjectsList)
         {
-            if(jumper.MaxHeight >= brick.transform.position.y)
+            DisableCollider(brick);
+        }
+    }
+
+    private void DisableCollider(GameObject brick)
+    {
+        Collider2D collider = brick.GetComponent<Collider2D>();
+        if (collider != null)
+        {
+            collider.enabled = false;
+        }
+    }
+
+    private void EnableCollidersBasedOnPosition()
+    {
+        foreach (GameObject brick in ObjectsList)
+        {
+            Collider2D collider = brick.GetComponent<Collider2D>();
+            if (collider != null)
             {
-                brick.GetComponent<Collider2D>().enabled = true;
+                // Enable collider if brick is in its correct position
+                if (jumper.MaxHeight >= brick.transform.position.y)
+                {
+                    collider.enabled = true;
+                }
+                else
+                {
+                    collider.enabled = false;
+                }
             }
         }
     }
