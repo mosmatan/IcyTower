@@ -25,7 +25,7 @@ public class CameraController : MonoBehaviour
         else if (transform.position.y > jumper.CurrentHeight + 5)
         {
             //transform.position = new Vector3(0, jumper.CurrentHeight + 1, -10);
-            SceneManager.LoadScene(0);
+            SceneManager.LoadScene("GameScene");
         }
     }
 

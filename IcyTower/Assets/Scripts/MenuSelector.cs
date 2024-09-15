@@ -1,18 +1,39 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Assets.Scripts;
 
 public class MenuSelector : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] private List<SelectableItem> menuItems = new List<SelectableItem>();
 
-    // Update is called once per frame
-    void Update()
+    private int index = 0;
+
+    private void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            menuItems[index].Leave();
+
+            index = (++index) % menuItems.Count;
+
+            menuItems[index].Enter();
+        }
+
+        else if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            menuItems[index].Leave();
+
+            if ((--index) < 0)
+            {
+                index = menuItems.Count - 1;
+            }
+
+            menuItems[index].Enter();
+        }
+
+        else if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.KeypadEnter))
+        {
+            menuItems[index].Select();
+        }
     }
 }
