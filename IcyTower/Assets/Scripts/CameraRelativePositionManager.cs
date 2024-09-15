@@ -35,9 +35,7 @@ public class CameraRelativePositionManager
             currentObject.transform.position = new Vector3(xPosition, currentObject.transform.position.y + NextObjectHeight, currentObject.transform.position.z);
             objects.Enqueue(currentObject);
             currentObject = objects.Dequeue();
-            Debug.Log("Hello");
             OnMovedObject();
-            Debug.Log("!!!!");
         } 
     }
 

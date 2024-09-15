@@ -1,6 +1,4 @@
 using Assets.Scripts;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -19,7 +17,7 @@ public class CameraController : MonoBehaviour
     {
         if (transform.position.y < jumper.MaxHeight)
         {
-            transform.position = new Vector3(0, jumper.MaxHeight, -10);
+            transform.position = new Vector3(0, jumper.MaxHeight, transform.position.z);
         }
 
         else if (transform.position.y > jumper.CurrentHeight + 5)
