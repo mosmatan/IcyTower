@@ -6,7 +6,7 @@ public class BrickManager : MonoBehaviour
 {
     [SerializeField] private List<GameObject> ObjectsList = new List<GameObject>();
     private IRelativePositionManager positionManager;
-    private IJumper jumper;
+    [SerializeField] private IJumper jumper;
 
     [SerializeField] private float nextObjectHeight;
     [SerializeField] private float offsetUnder;
@@ -18,12 +18,11 @@ public class BrickManager : MonoBehaviour
         positionManager.Boundries = boundries;
         positionManager.NextObjectDelta = nextObjectHeight;
         positionManager.MoveOffset = offsetUnder;
-        positionManager.MovedObject += HandleMovedObject;
+        //positionManager.MovedObject += HandleMovedObject;
     }
 
     private void Start()
     {
-        jumper = GameObject.FindObjectOfType<Jumper>();
         DisableAllColliders();
     }
 
@@ -60,14 +59,15 @@ public class BrickManager : MonoBehaviour
         foreach (GameObject brick in ObjectsList)
         {
             Collider2D collider = brick.GetComponent<Collider2D>();
+
             if (collider != null)
             {
                 // Enable collider if brick is in its correct position
-                if (jumper.MaxHeight >= brick.transform.position.y)
+                if (jumper.MinBoundaryY >= collider.bounds.max.y)
                 {
                     collider.enabled = true;
                 }
-                else
+                else if (jumper.MinBoundaryY < collider.bounds.max.y - 0.1f)
                 {
                     collider.enabled = false;
                 }

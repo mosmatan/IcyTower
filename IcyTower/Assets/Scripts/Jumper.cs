@@ -2,31 +2,24 @@ using Assets.Scripts;
 using System;
 using UnityEngine;
 
-public class Jumper : MonoBehaviour, IJumper
+public class Jumper : IJumper
 {
-    
-    private Rigidbody2D rigidbody;
+    private const float multiSpeedConst = 100f;
 
+    [SerializeField] private Rigidbody2D rigidbody;
+    [SerializeField] private Collider2D collider;
     [SerializeField] private float jumpForce = 5;
     [SerializeField] private float speed = 5;
 
     private bool onFloor = true;
     private float maxHeight = 0;
+    private int xDirection = 0;
 
-    public float MaxHeight => maxHeight;
+    public override float MaxHeight => maxHeight;
 
-    public float CurrentHeight => gameObject.transform.position.y;
+    public override float MinBoundaryY => collider.bounds.min.y;
 
-    private void Awake()
-    {
-        rigidbody = GetComponent<Rigidbody2D>();
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public override float CurrentHeight => gameObject.transform.position.y;
 
     // Update is called once per frame
     void Update()
@@ -34,7 +27,12 @@ public class Jumper : MonoBehaviour, IJumper
         maxHeight = Math.Max(maxHeight, transform.position.y);
     }
 
-    public void Jump()
+    private void FixedUpdate()
+    {
+        rigidbody.AddForce(new Vector2(speed * multiSpeedConst * xDirection * Time.deltaTime, 0), ForceMode2D.Force);
+    }
+
+    public override void Jump()
     {
         if (onFloor)
         {
@@ -43,9 +41,9 @@ public class Jumper : MonoBehaviour, IJumper
         }
     }
 
-    public void Move(int direction)
+    public override void Move(int direction)
     {
-        rigidbody.AddForce(new Vector2(speed * direction, 0), ForceMode2D.Force);
+        xDirection = direction;
     }
 
     private void OnCollisionExit2D(Collision2D collision)

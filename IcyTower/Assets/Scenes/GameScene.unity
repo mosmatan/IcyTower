@@ -297,6 +297,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6d138170e39b05438ac3a0e8cceeb1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rigidbody: {fileID: 50197649}
+  collider: {fileID: 50197650}
   jumpForce: 10
   speed: 5
 --- !u!212 &50197652
@@ -916,6 +918,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd54113cf09282845a0b4660667df75f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  jumper: {fileID: 50197651}
 --- !u!1001 &679391890
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1031,7 +1034,8 @@ MonoBehaviour:
   - {fileID: 1502247186}
   - {fileID: 71150227}
   - {fileID: 1658073386}
-  nextObjectHeight: 14
+  jumper: {fileID: 50197651}
+  nextObjectHeight: 13
   offsetUnder: 6
   boundries: 4
 --- !u!4 &694078786

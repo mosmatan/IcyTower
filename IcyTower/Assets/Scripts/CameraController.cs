@@ -4,13 +4,7 @@ using UnityEngine.SceneManagement;
 
 public class CameraController : MonoBehaviour
 {
-    private IJumper jumper;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        jumper = GameObject.FindAnyObjectByType<Jumper>();
-    }
+    [SerializeField] private IJumper jumper;
 
     // Update is called once per frame
     void Update()

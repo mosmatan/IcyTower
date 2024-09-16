@@ -28,7 +28,6 @@ public class GameManager : Singleton<GameManager>
             playerController.RightKey = RightKey;
             playerController.LeftKey = LeftKey;
         }
-
     }
 
 

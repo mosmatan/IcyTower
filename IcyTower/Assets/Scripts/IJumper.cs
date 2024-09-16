@@ -1,11 +1,13 @@
-﻿namespace Assets.Scripts
-{
-    public interface IJumper
-    {
-        float MaxHeight { get; }
+﻿using UnityEngine;
 
-        float CurrentHeight { get; }
-        void Jump();
-        void Move(int direction);
+namespace Assets.Scripts
+{
+    public abstract class IJumper: MonoBehaviour
+    {
+        public abstract float MaxHeight { get; }
+        public abstract float MinBoundaryY { get; }
+        public abstract float CurrentHeight { get; }
+        public abstract void Jump();
+        public abstract void Move(int direction);
     }
 }
