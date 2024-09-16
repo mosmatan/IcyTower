@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Jumper : MonoBehaviour, IJumper
 {
+    private const float multiSpeedConst = 100f;
     
     private Rigidbody2D rigidbody;
     private Collider2D collider;
@@ -13,6 +14,7 @@ public class Jumper : MonoBehaviour, IJumper
 
     private bool onFloor = true;
     private float maxHeight = 0;
+    private int xDirection = 0;
 
     public float MaxHeight => maxHeight;
 
@@ -38,6 +40,11 @@ public class Jumper : MonoBehaviour, IJumper
         maxHeight = Math.Max(maxHeight, transform.position.y);
     }
 
+    private void FixedUpdate()
+    {
+        rigidbody.AddForce(new Vector2(speed * multiSpeedConst * xDirection * Time.deltaTime, 0), ForceMode2D.Force);
+    }
+
     public void Jump()
     {
         if (onFloor)
@@ -49,7 +56,7 @@ public class Jumper : MonoBehaviour, IJumper
 
     public void Move(int direction)
     {
-        rigidbody.AddForce(new Vector2(speed * direction, 0), ForceMode2D.Force);
+        xDirection = direction;
     }
 
     private void OnCollisionExit2D(Collision2D collision)
