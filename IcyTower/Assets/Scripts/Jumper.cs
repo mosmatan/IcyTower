@@ -6,6 +6,7 @@ public class Jumper : MonoBehaviour, IJumper
 {
     
     private Rigidbody2D rigidbody;
+    private Collider2D collider;
 
     [SerializeField] private float jumpForce = 5;
     [SerializeField] private float speed = 5;
@@ -15,11 +16,14 @@ public class Jumper : MonoBehaviour, IJumper
 
     public float MaxHeight => maxHeight;
 
+    public float MinBoundaryY => collider.bounds.min.y;
+
     public float CurrentHeight => gameObject.transform.position.y;
 
     private void Awake()
     {
         rigidbody = GetComponent<Rigidbody2D>();
+        collider = GetComponent<Collider2D>();
     }
 
     // Start is called before the first frame update

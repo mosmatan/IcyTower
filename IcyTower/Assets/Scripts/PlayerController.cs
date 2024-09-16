@@ -5,8 +5,8 @@ public class PlayerController : MonoBehaviour, IPlayerController
 {
     private IJumper jumper;
 
-    public KeyCode RightKey { get; set; } = KeyCode.D;
-    public KeyCode LeftKey { get; set; } = KeyCode.A;
+    public KeyCode RightKey { get; set; } = KeyCode.RightArrow;
+    public KeyCode LeftKey { get; set; } = KeyCode.LeftArrow;
     public KeyCode JumpKey { get; set; } = KeyCode.Space;
 
     // Start is called before the first frame update

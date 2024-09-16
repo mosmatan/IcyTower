@@ -1031,7 +1031,7 @@ MonoBehaviour:
   - {fileID: 1502247186}
   - {fileID: 71150227}
   - {fileID: 1658073386}
-  nextObjectHeight: 14
+  nextObjectHeight: 13
   offsetUnder: 6
   boundries: 4
 --- !u!4 &694078786

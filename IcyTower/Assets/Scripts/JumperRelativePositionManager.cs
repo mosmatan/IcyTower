@@ -36,9 +36,9 @@ public class JumperRelativePositionManager : IRelativePositionManager
         {
             float xPosition = UnityEngine.Random.Range(-Boundries, Boundries);
             currentObject.transform.position = new Vector3(xPosition, currentObject.transform.position.y + NextObjectDelta, currentObject.transform.position.z);
+            OnMovedObject();
             objects.Enqueue(currentObject);
             currentObject = objects.Dequeue();
-            OnMovedObject();
         } 
     }
 

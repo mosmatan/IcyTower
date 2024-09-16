@@ -63,11 +63,11 @@ public class BrickManager : MonoBehaviour
             if (collider != null)
             {
                 // Enable collider if brick is in its correct position
-                if (jumper.MaxHeight >= brick.transform.position.y)
+                if (jumper.MinBoundaryY >= collider.bounds.max.y)
                 {
                     collider.enabled = true;
                 }
-                else
+                else if (jumper.MinBoundaryY < collider.bounds.max.y - 0.1f)
                 {
                     collider.enabled = false;
                 }
