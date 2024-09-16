@@ -18,7 +18,7 @@ public class BrickManager : MonoBehaviour
         positionManager.Boundries = boundries;
         positionManager.NextObjectDelta = nextObjectHeight;
         positionManager.MoveOffset = offsetUnder;
-        positionManager.MovedObject += HandleMovedObject;
+        //positionManager.MovedObject += HandleMovedObject;
     }
 
     private void Start()
@@ -60,6 +60,7 @@ public class BrickManager : MonoBehaviour
         foreach (GameObject brick in ObjectsList)
         {
             Collider2D collider = brick.GetComponent<Collider2D>();
+
             if (collider != null)
             {
                 // Enable collider if brick is in its correct position

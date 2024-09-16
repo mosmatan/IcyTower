@@ -2,13 +2,12 @@ using Assets.Scripts;
 using System;
 using UnityEngine;
 
-public class Jumper : MonoBehaviour, IJumper
+public class Jumper : IJumper
 {
     private const float multiSpeedConst = 100f;
-    
-    private Rigidbody2D rigidbody;
-    private Collider2D collider;
 
+    [SerializeField] private Rigidbody2D rigidbody;
+    [SerializeField] private Collider2D collider;
     [SerializeField] private float jumpForce = 5;
     [SerializeField] private float speed = 5;
 
@@ -16,23 +15,11 @@ public class Jumper : MonoBehaviour, IJumper
     private float maxHeight = 0;
     private int xDirection = 0;
 
-    public float MaxHeight => maxHeight;
+    public override float MaxHeight => maxHeight;
 
-    public float MinBoundaryY => collider.bounds.min.y;
+    public override float MinBoundaryY => collider.bounds.min.y;
 
-    public float CurrentHeight => gameObject.transform.position.y;
-
-    private void Awake()
-    {
-        rigidbody = GetComponent<Rigidbody2D>();
-        collider = GetComponent<Collider2D>();
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public override float CurrentHeight => gameObject.transform.position.y;
 
     // Update is called once per frame
     void Update()
@@ -45,7 +32,7 @@ public class Jumper : MonoBehaviour, IJumper
         rigidbody.AddForce(new Vector2(speed * multiSpeedConst * xDirection * Time.deltaTime, 0), ForceMode2D.Force);
     }
 
-    public void Jump()
+    public override void Jump()
     {
         if (onFloor)
         {
@@ -54,7 +41,7 @@ public class Jumper : MonoBehaviour, IJumper
         }
     }
 
-    public void Move(int direction)
+    public override void Move(int direction)
     {
         xDirection = direction;
     }
