@@ -297,8 +297,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6d138170e39b05438ac3a0e8cceeb1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rigidbody: {fileID: 0}
-  collider: {fileID: 0}
+  rigidbody: {fileID: 50197649}
+  collider: {fileID: 50197650}
   jumpForce: 10
   speed: 5
 --- !u!212 &50197652
@@ -1034,6 +1034,7 @@ MonoBehaviour:
   - {fileID: 1502247186}
   - {fileID: 71150227}
   - {fileID: 1658073386}
+  jumper: {fileID: 50197651}
   nextObjectHeight: 13
   offsetUnder: 6
   boundries: 4

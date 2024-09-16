@@ -12,8 +12,7 @@ public class PlayerController : MonoBehaviour, IPlayerController
     // Start is called before the first frame update
     void Start()
     {
-        jumper = GameObject.FindAnyObjectByType<Jumper>();
-        Debug.Log(RightKey.ToString()+ LeftKey.ToString()+ JumpKey.ToString());
+        jumper = GameObject.FindAnyObjectByType<IJumper>();
     }
 
     // Update is called once per frame

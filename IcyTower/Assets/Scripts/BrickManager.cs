@@ -6,7 +6,7 @@ public class BrickManager : MonoBehaviour
 {
     [SerializeField] private List<GameObject> ObjectsList = new List<GameObject>();
     private IRelativePositionManager positionManager;
-    private IJumper jumper;
+    [SerializeField] private IJumper jumper;
 
     [SerializeField] private float nextObjectHeight;
     [SerializeField] private float offsetUnder;
@@ -23,7 +23,6 @@ public class BrickManager : MonoBehaviour
 
     private void Start()
     {
-        jumper = GameObject.FindObjectOfType<Jumper>();
         DisableAllColliders();
     }
 

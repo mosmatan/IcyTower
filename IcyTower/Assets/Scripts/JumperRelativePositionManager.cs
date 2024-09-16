@@ -25,7 +25,7 @@ public class JumperRelativePositionManager : IRelativePositionManager
 
     private void initialize()
     {
-        jumper = GameObject.FindAnyObjectByType<Jumper>();
+        jumper = GameObject.FindAnyObjectByType<IJumper>();
         listToQueue();
         currentObject = objects.Dequeue();
     }
