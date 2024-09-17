@@ -2,7 +2,6 @@ using Assets.Scripts;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-
 public class BrickManager : MonoBehaviour
 {
     [SerializeField] private List<Brick> bricks = new List<Brick>();

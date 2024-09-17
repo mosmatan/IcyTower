@@ -1,5 +1,7 @@
 using Assets.Scripts;
 using System;
+using System.Collections;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class Jumper : IJumper
@@ -10,10 +12,13 @@ public class Jumper : IJumper
     [SerializeField] private Collider2D collider;
     [SerializeField] private float jumpForce = 5;
     [SerializeField] private float speed = 5;
-
+    [SerializeField] private float superJumpWindow = 0.1f;
+    [SerializeField] private Animator animator;
     private bool onFloor = true;
     private float maxHeight = 0;
     private int xDirection = 0;
+    private bool isSuperJump = false;
+    private bool isSuperJumpWindowOpen= false;
 
     public override float MaxHeight => maxHeight;
 
@@ -21,10 +26,16 @@ public class Jumper : IJumper
 
     public override float CurrentHeight => gameObject.transform.position.y;
 
-    // Update is called once per frame
     void Update()
     {
         maxHeight = Math.Max(maxHeight, transform.position.y);
+        animator.SetFloat("XVelocity", math.abs(rigidbody.velocity.x));
+        animator.SetFloat("YVelocity", rigidbody.velocity.y);
+
+        if (onFloor && Mathf.Approximately(rigidbody.velocity.y, 0))
+        {
+            animator.SetBool("SuperJump", false);
+        }
     }
 
     private void FixedUpdate()
@@ -34,7 +45,13 @@ public class Jumper : IJumper
 
     public override void Jump()
     {
-        if (onFloor)
+        if (isSuperJumpWindowOpen && rigidbody.velocity.y <= 0)
+        {
+            onFloor = false;
+            rigidbody.AddForce(new Vector2(0, jumpForce * 2), ForceMode2D.Impulse);
+            animator.SetBool("SuperJump", true);
+        }
+        else if (onFloor)
         {
             onFloor = false;
             rigidbody.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
@@ -44,6 +61,11 @@ public class Jumper : IJumper
     public override void Move(int direction)
     {
         xDirection = direction;
+
+        if (direction != 0)
+        {
+            transform.localScale = new Vector3(direction, transform.localScale.y, transform.localScale.z);
+        }
     }
 
     private void OnCollisionExit2D(Collision2D collision)
@@ -51,6 +73,7 @@ public class Jumper : IJumper
         if (collision.gameObject.tag == "Brick")
         {
             onFloor = false;
+            isSuperJumpWindowOpen = false;
         }
     }
 
@@ -58,7 +81,15 @@ public class Jumper : IJumper
     {
         if(collision.gameObject.tag == "Brick")
         {
+            StartCoroutine(SuperJumpTimer());
             onFloor = true;
         }
+    }
+
+    private IEnumerator SuperJumpTimer()
+    {
+        isSuperJumpWindowOpen = true;
+        yield return new WaitForSeconds(superJumpWindow);
+        isSuperJumpWindowOpen = false;
     }
 }

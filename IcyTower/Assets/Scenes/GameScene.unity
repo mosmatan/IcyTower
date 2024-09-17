@@ -267,6 +267,7 @@ GameObject:
   - component: {fileID: 50197651}
   - component: {fileID: 50197650}
   - component: {fileID: 50197649}
+  - component: {fileID: 50197654}
   m_Layer: 0
   m_Name: Jumper
   m_TagString: Player
@@ -362,6 +363,8 @@ MonoBehaviour:
   collider: {fileID: 50197650}
   jumpForce: 10
   speed: 7
+  superJumpWindow: 0.1
+  animator: {fileID: 0}
 --- !u!212 &50197652
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -429,6 +432,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &50197654
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 50197648}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: ec215e398b3cb455a9826d44e57c3224, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &71150227 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4985403577819892571, guid: 7d161eaec30a35649b4bcedf7d7851ad, type: 3}

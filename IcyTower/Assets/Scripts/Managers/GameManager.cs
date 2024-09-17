@@ -1,6 +1,5 @@
 using Assets.Scripts;
 using System.Collections;
-using System.Net.NetworkInformation;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -14,8 +13,8 @@ public class GameManager : Singleton<GameManager>
     private bool resetGameOnPrograss = false;
     public bool IsPlaying { get; private set; } = true;
 
-    public KeyCode RightKey { get; set; } = KeyCode.D;
-    public KeyCode LeftKey { get; set; } = KeyCode.A;
+    public KeyCode RightKey { get; set; } = KeyCode.RightArrow;
+    public KeyCode LeftKey { get; set; } = KeyCode.LeftArrow;
     public KeyCode JumpKey { get; set; } = KeyCode.Space;
     public MenuSelector SceneMenu { get; set; } = null;
 
