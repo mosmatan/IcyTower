@@ -64,8 +64,9 @@ public class BrickManager : MonoBehaviour
             {
                 brick.SetActiveCollider(true);
             }
-            else if (jumper.MinBoundaryY < brick.Collider.bounds.max.y - 0.1f)
+            else if (jumper.MinBoundaryY < brick.Collider.bounds.max.y - 0.2f)
             {
+                Debug.Log($"{brick.gameObject.name} is now disabled");
                 brick.SetActiveCollider(false);
             }
         }

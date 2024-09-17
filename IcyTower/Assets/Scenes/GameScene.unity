@@ -345,7 +345,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.75, y: 1.275}
+  m_Size: {x: 0.32, y: 1.275}
   m_EdgeRadius: 0
 --- !u!114 &50197651
 MonoBehaviour:
@@ -364,7 +364,7 @@ MonoBehaviour:
   jumpForce: 10
   speed: 7
   superJumpWindow: 0.1
-  animator: {fileID: 0}
+  animator: {fileID: 50197654}
 --- !u!212 &50197652
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -426,7 +426,7 @@ Transform:
   m_GameObject: {fileID: 50197648}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.44, y: -3.86, z: 0}
+  m_LocalPosition: {x: -3.453, y: -3.123, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2017,6 +2017,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1681412955382773198, guid: 7d161eaec30a35649b4bcedf7d7851ad, type: 3}
       propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1681412955382773198, guid: 7d161eaec30a35649b4bcedf7d7851ad, type: 3}
+      propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4985403577819892571, guid: 7d161eaec30a35649b4bcedf7d7851ad, type: 3}

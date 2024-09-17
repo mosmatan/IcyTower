@@ -32,8 +32,9 @@ public class Jumper : IJumper
         animator.SetFloat("XVelocity", math.abs(rigidbody.velocity.x));
         animator.SetFloat("YVelocity", rigidbody.velocity.y);
 
-        if (onFloor && Mathf.Approximately(rigidbody.velocity.y, 0))
+        if (onFloor && rigidbody.velocity.y <= 0)
         {
+            Debug.Log("Super");
             animator.SetBool("SuperJump", false);
         }
     }
