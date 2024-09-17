@@ -34,7 +34,6 @@ public class Jumper : IJumper
 
         if (onFloor && rigidbody.velocity.y <= 0)
         {
-            Debug.Log("Super");
             animator.SetBool("SuperJump", false);
         }
     }

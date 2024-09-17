@@ -20,6 +20,12 @@ public class BrickManager : MonoBehaviour
         positionManager.Boundries = boundries;
         positionManager.NextObjectDelta = nextObjectHeight;
         positionManager.MoveOffset = offsetUnder;
+        positionManager.MovedObject += onChangePosition;
+    }
+
+    private void onChangePosition(GameObject brick)
+    {
+        
     }
 
     private void Start()
@@ -64,9 +70,8 @@ public class BrickManager : MonoBehaviour
             {
                 brick.SetActiveCollider(true);
             }
-            else if (jumper.MinBoundaryY < brick.Collider.bounds.max.y - 0.2f)
+            else if (jumper.MinBoundaryY < brick.Collider.bounds.max.y - 0.6f)
             {
-                Debug.Log($"{brick.gameObject.name} is now disabled");
                 brick.SetActiveCollider(false);
             }
         }
