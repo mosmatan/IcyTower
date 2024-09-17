@@ -4,14 +4,20 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Assets.Scripts;
+using System;
 
 public class FadeScreen : IFadeScreen
 {
     private const float stepsToChange = 1 / 255f;
 
+    public override event Action Faded;
+    public override event Action Fading;
+
     [SerializeField] private Image image;
     [SerializeField] private int seconds = 1;
     [SerializeField] Color color;
+
+    private bool isFading = false;
 
     public override int Seconds => seconds;
 
@@ -23,7 +29,11 @@ public class FadeScreen : IFadeScreen
 
     public override void FadeOut()
     {
-        StartCoroutine(fadeOut());
+        if(!isFading)
+        {
+            StartCoroutine(fadeOut());
+            OnFading();
+        }
     }
 
     private IEnumerator fadeOut()
@@ -34,11 +44,17 @@ public class FadeScreen : IFadeScreen
 
             yield return new WaitForSeconds(seconds / 255f);
         }
+
+        OnFaded();
     }
 
     public override void FadeIn()
     {
-        StartCoroutine(fadeIn());
+        if (!isFading)
+        {
+            StartCoroutine(fadeIn());
+            OnFading();
+        }
     }
 
     private IEnumerator fadeIn()
@@ -48,6 +64,28 @@ public class FadeScreen : IFadeScreen
             image.color = new Color(color.r, color.g, color.b, image.color.a + stepsToChange);
 
             yield return new WaitForSeconds(seconds / 255f);
+        }
+
+        OnFaded();
+    }
+
+    protected override void OnFaded()
+    {
+        isFading = false;
+
+        if (Faded != null)
+        {
+            Faded();
+        }
+    }
+
+    protected override void OnFading()
+    {
+        isFading = true;
+
+        if (Fading != null)
+        {
+            Fading();
         }
     }
 }

@@ -8,7 +8,7 @@ public class MenuSelector : MonoBehaviour
     private int index = 0;
     public bool isActive { get; set; } = true;
 
-    private void Start()
+    private void Awake()
     {
         if(GameManager.Instance.SceneMenu == null)
         {

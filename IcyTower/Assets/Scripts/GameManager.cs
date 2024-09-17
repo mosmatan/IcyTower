@@ -12,6 +12,7 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] private IFadeScreen fadeScreen;
 
     private bool resetGameOnPrograss = false;
+    public bool IsPlaying { get; private set; } = true;
 
     public KeyCode RightKey { get; set; } = KeyCode.D;
     public KeyCode LeftKey { get; set; } = KeyCode.A;
@@ -32,8 +33,37 @@ public class GameManager : Singleton<GameManager>
             playerController.LeftKey = LeftKey;
         }
 
+        setActiveComponents(false);
+
         fadeScreen = GameObject.FindWithTag("FadeScreen").GetComponent<IFadeScreen>();
+
+        if (fadeScreen != null)
+        {
+            fadeScreen.Faded += FadeScreen_Faded;
+            fadeScreen.Fading += FadeScreen_Fading;
+        }
+
         resetGameOnPrograss = false;
+    }
+
+    private void FadeScreen_Fading()
+    {
+        setActiveComponents(false);
+    }
+
+    private void FadeScreen_Faded()
+    {
+        setActiveComponents(true);
+    }
+
+    private void setActiveComponents(bool active)
+    {
+        if (SceneMenu != null)
+        {
+            SceneMenu.isActive = active;
+        }
+
+        IsPlaying = active;
     }
 
     public void ResetGame()
@@ -41,6 +71,7 @@ public class GameManager : Singleton<GameManager>
         if (!resetGameOnPrograss)
         {
             resetGameOnPrograss = true;
+
             StartCoroutine(resetGame());
         }
     }
@@ -51,7 +82,7 @@ public class GameManager : Singleton<GameManager>
         {
             float seconds = (float)fadeScreen.Seconds;
             fadeScreen.FadeIn();
-            yield return new WaitForSeconds(seconds + 0.5f);
+            yield return new WaitForSeconds(seconds + 1f);
         }
 
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
