@@ -1,4 +1,6 @@
 using Assets.Scripts;
+using System.Collections;
+using System.Net.NetworkInformation;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -7,6 +9,9 @@ public class GameManager : Singleton<GameManager>
     private IPlayerController playerController;
 
     [SerializeField] private GameObject playerControllerPref;
+    [SerializeField] private IFadeScreen fadeScreen;
+
+    private bool resetGameOnPrograss = false;
 
     public KeyCode RightKey { get; set; } = KeyCode.D;
     public KeyCode LeftKey { get; set; } = KeyCode.A;
@@ -15,10 +20,8 @@ public class GameManager : Singleton<GameManager>
 
     private void Awake()
     {
-        DontDestroyOnLoad(gameObject);
         SceneManager.sceneLoaded += SceneManager_sceneLoaded;
     }
-
     private void SceneManager_sceneLoaded(Scene loadedScene, LoadSceneMode mode)
     {
         if(loadedScene.name == "GameScene")
@@ -28,18 +31,29 @@ public class GameManager : Singleton<GameManager>
             playerController.RightKey = RightKey;
             playerController.LeftKey = LeftKey;
         }
+
+        fadeScreen = GameObject.FindWithTag("FadeScreen").GetComponent<IFadeScreen>();
+        resetGameOnPrograss = false;
     }
 
-
-    // Start is called before the first frame update
-    void Start()
+    public void ResetGame()
     {
-        
+        if (!resetGameOnPrograss)
+        {
+            resetGameOnPrograss = true;
+            StartCoroutine(resetGame());
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    private IEnumerator resetGame()
     {
-        
+        if (fadeScreen != null)
+        {
+            float seconds = (float)fadeScreen.Seconds;
+            fadeScreen.FadeIn();
+            yield return new WaitForSeconds(seconds + 0.5f);
+        }
+
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }
