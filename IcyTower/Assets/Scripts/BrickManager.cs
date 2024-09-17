@@ -1,24 +1,26 @@
 using Assets.Scripts;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class BrickManager : MonoBehaviour
 {
-    [SerializeField] private List<GameObject> ObjectsList = new List<GameObject>();
-    private IRelativePositionManager positionManager;
+    [SerializeField] private List<Brick> bricks = new List<Brick>();
     [SerializeField] private IJumper jumper;
 
     [SerializeField] private float nextObjectHeight;
     [SerializeField] private float offsetUnder;
     [SerializeField] private int boundries;
 
+    private IRelativePositionManager positionManager;
+
     private void Awake()
     {
-        positionManager = new JumperRelativePositionManager(ObjectsList);
+
+        positionManager = new JumperRelativePositionManager(bricks.ConvertAll(brick => brick.gameObject));
         positionManager.Boundries = boundries;
         positionManager.NextObjectDelta = nextObjectHeight;
         positionManager.MoveOffset = offsetUnder;
-        //positionManager.MovedObject += HandleMovedObject;
     }
 
     private void Start()
@@ -39,9 +41,9 @@ public class BrickManager : MonoBehaviour
 
     private void DisableAllColliders()
     {
-        foreach (GameObject brick in ObjectsList)
+        foreach (Brick brick in bricks)
         {
-            DisableCollider(brick);
+            brick.SetActiveCollider(false);
         }
     }
 
@@ -56,21 +58,16 @@ public class BrickManager : MonoBehaviour
 
     private void EnableCollidersBasedOnPosition()
     {
-        foreach (GameObject brick in ObjectsList)
+        foreach (Brick brick in bricks)
         {
-            Collider2D collider = brick.GetComponent<Collider2D>();
-
-            if (collider != null)
+            // Enable collider if brick is in its correct position
+            if (jumper.MinBoundaryY >= brick.Collider.bounds.max.y)
             {
-                // Enable collider if brick is in its correct position
-                if (jumper.MinBoundaryY >= collider.bounds.max.y)
-                {
-                    collider.enabled = true;
-                }
-                else if (jumper.MinBoundaryY < collider.bounds.max.y - 0.1f)
-                {
-                    collider.enabled = false;
-                }
+                brick.SetActiveCollider(true);
+            }
+            else if (jumper.MinBoundaryY < brick.Collider.bounds.max.y - 0.1f)
+            {
+                brick.SetActiveCollider(false);
             }
         }
     }

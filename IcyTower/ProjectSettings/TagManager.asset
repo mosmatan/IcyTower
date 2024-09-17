@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Brick
   - Selector
+  - FadeScreen
   layers:
   - Default
   - TransparentFX
