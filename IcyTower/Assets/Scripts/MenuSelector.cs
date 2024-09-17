@@ -55,7 +55,7 @@ public class MenuSelector : MonoBehaviour
             menuItems[index].Enter();
         }
 
-        else if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.KeypadEnter))
+        else if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return))
         {
             menuItems[index].Select();
         }
