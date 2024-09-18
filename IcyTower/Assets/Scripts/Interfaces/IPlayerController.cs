@@ -2,11 +2,11 @@
 
 namespace Assets.Scripts
 {
-    public interface IPlayerController
+    public abstract class IPlayerController : MonoBehaviour
     {
-        KeyCode RightKey { get; set; }
-        KeyCode LeftKey { get; set; }
-        KeyCode JumpKey { get; set; }
+        public abstract KeyCode RightKey { get; set; }
+        public abstract KeyCode LeftKey { get; set; }
+        public abstract KeyCode JumpKey { get; set; }
 
     }
 }

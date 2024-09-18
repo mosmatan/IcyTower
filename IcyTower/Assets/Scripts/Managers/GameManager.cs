@@ -1,4 +1,3 @@
-using System;
 using Assets.Scripts;
 using System.Collections;
 using UnityEngine;
@@ -19,9 +18,22 @@ public class GameManager : Singleton<GameManager>
     public KeyCode JumpKey { get; set; } = KeyCode.Space;
     public MenuSelector SceneMenu { get; set; } = null;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         SceneManager.sceneLoaded += SceneManager_sceneLoaded;
+    }
+
+    protected override void OnDestroy()
+    {
+        if (playerControllerPref != null)
+        {
+            Destroy(playerController.gameObject);
+        }
+        
+        SceneManager.sceneLoaded -= SceneManager_sceneLoaded;
+
+        base.OnDestroy();
     }
     private void SceneManager_sceneLoaded(Scene loadedScene, LoadSceneMode mode)
     {
@@ -85,6 +97,7 @@ public class GameManager : Singleton<GameManager>
             yield return new WaitForSeconds(seconds + 1f);
         }
 
+        Destroy(playerController.gameObject);
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

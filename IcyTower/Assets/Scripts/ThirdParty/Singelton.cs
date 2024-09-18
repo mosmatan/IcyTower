@@ -25,6 +25,16 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
         }
     }
 
+    protected virtual void Awake()
+    {
+        Debug.Log("Hello");
+        if (Instance != this)
+        {
+            Debug.Log("World");
+            Destroy(gameObject);
+        }
+    }
+
     protected virtual void OnDestroy()
     {
         if (_instance == this)

@@ -1,13 +1,13 @@
 using Assets.Scripts;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour, IPlayerController
+public class PlayerController : IPlayerController
 {
     private IJumper jumper;
 
-    public KeyCode RightKey { get; set; } = KeyCode.RightArrow;
-    public KeyCode LeftKey { get; set; } = KeyCode.LeftArrow;
-    public KeyCode JumpKey { get; set; } = KeyCode.Space;
+    public override KeyCode RightKey { get; set; } = KeyCode.RightArrow;
+    public override KeyCode LeftKey { get; set; } = KeyCode.LeftArrow;
+    public override KeyCode JumpKey { get; set; } = KeyCode.Space;
 
     // Start is called before the first frame update
     void Start()
