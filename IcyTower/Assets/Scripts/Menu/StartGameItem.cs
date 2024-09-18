@@ -8,6 +8,7 @@ namespace Assets.Scripts
     {
         [SerializeField] private float timeOffset = 0.5f;
         [SerializeField] private IFadeScreen fadeScreen;
+        [SerializeField] private AudioManager audioManager; 
 
         public override void Select()
         {
@@ -17,6 +18,7 @@ namespace Assets.Scripts
         private IEnumerator changeScene(float seconds)
         {
             fadeScreen.FadeIn();
+            audioManager.sceneFadeOutAudio();
             yield return new WaitForSeconds(seconds + timeOffset);
             SceneManager.LoadScene("GameScene");
         }

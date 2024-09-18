@@ -8,6 +8,8 @@ public class Jumper : IJumper
 {
     private const float multiSpeedConst = 100f;
 
+    public override event Action Jumped;
+    
     [SerializeField] private Rigidbody2D rigidbody;
     [SerializeField] private Collider2D collider;
     [SerializeField] private float jumpForce = 5;
@@ -50,11 +52,13 @@ public class Jumper : IJumper
             onFloor = false;
             rigidbody.AddForce(new Vector2(0, jumpForce * 2), ForceMode2D.Impulse);
             animator.SetBool("SuperJump", true);
+            OnJumped();
         }
         else if (onFloor)
         {
             onFloor = false;
             rigidbody.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
+            OnJumped();
         }
     }
 
@@ -91,5 +95,13 @@ public class Jumper : IJumper
         isSuperJumpWindowOpen = true;
         yield return new WaitForSeconds(superJumpWindow);
         isSuperJumpWindowOpen = false;
+    }
+
+    protected override void OnJumped()
+    {
+        if (Jumped != null)
+        {
+            Jumped();
+        }
     }
 }
