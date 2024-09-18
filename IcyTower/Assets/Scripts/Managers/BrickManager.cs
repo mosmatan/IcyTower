@@ -1,6 +1,5 @@
 using Assets.Scripts;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 public class BrickManager : MonoBehaviour
 {
@@ -20,12 +19,6 @@ public class BrickManager : MonoBehaviour
         positionManager.Boundries = boundries;
         positionManager.NextObjectDelta = nextObjectHeight;
         positionManager.MoveOffset = offsetUnder;
-        positionManager.MovedObject += onChangePosition;
-    }
-
-    private void onChangePosition(GameObject brick)
-    {
-        
     }
 
     private void Start()

@@ -6,9 +6,11 @@ using UnityEngine;
 public class Brick : MonoBehaviour
 {
     public event Action PlayerPass;
+    public event Action PositionChanged;
     
     private RaycastHit2D hitRight;
     private RaycastHit2D hitLeft;
+    private bool countScoreMode = true;
     
     [SerializeField] Collider2D collider;
 
@@ -19,21 +21,34 @@ public class Brick : MonoBehaviour
         collider.enabled = active;
     }
 
+    private void Update()
+    {
+        if(transform.hasChanged)
+        {
+            OnPositionChanged();
+            transform.hasChanged = false;
+            countScoreMode = true;
+        }
+    }
+
     private void FixedUpdate()
     {
         hitRight = Physics2D.Raycast(transform.position, transform.right);
         hitLeft = Physics2D.Raycast(transform.position, -transform.right);
-        
-        if (hitRight.collider != null && hitRight.collider.tag == "Player" && transform.hasChanged)
-        {
-            transform.hasChanged = false;
-            OnPlayerPass();
-        }
 
-        if (hitLeft.collider != null && hitLeft.collider.tag == "Player" && transform.hasChanged)
+        if (countScoreMode)
         {
-            transform.hasChanged = false;
-            OnPlayerPass();
+            if (hitRight.collider != null && hitRight.collider.tag == "Player")
+            {
+                countScoreMode = false;
+                OnPlayerPass();
+            }
+
+            if (hitLeft.collider != null && hitLeft.collider.tag == "Player")
+            {
+                countScoreMode = false;
+                OnPlayerPass();
+            }
         }
     }
 
@@ -42,6 +57,14 @@ public class Brick : MonoBehaviour
         if (PlayerPass != null)
         {
             PlayerPass();
+        }
+    }
+
+    protected virtual void OnPositionChanged()
+    {
+        if(PositionChanged != null)
+        {
+            PositionChanged();
         }
     }
 }
