@@ -1,5 +1,7 @@
 using Assets.Scripts;
 using System.Collections;
+using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -10,9 +12,17 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] private GameObject playerControllerPref;
     [SerializeField] private IFadeScreen fadeScreen;
     [SerializeField] private GameOverMenu gameOverMenu;
+    [SerializeField] private GameObject pauseObject;
 
     private bool resetGameOnPrograss = false;
-    public bool IsPlaying { get; private set; } = true;
+    private bool sceneWithPause = false;
+    private bool isPlaying = true;
+    private bool isPaused = false;
+    public bool IsPlaying 
+    {
+        get { return isPlaying && !isPaused; }
+        private set { isPlaying = value; isPaused = value ? false : isPaused; }
+    }
 
     public KeyCode RightKey { get; set; } = KeyCode.RightArrow;
     public KeyCode LeftKey { get; set; } = KeyCode.LeftArrow;
@@ -45,6 +55,20 @@ public class GameManager : Singleton<GameManager>
                 gameOverMenu?.gameObject.SetActive(true);
             }
         }
+
+        if (Input.GetKeyUp(KeyCode.P) && IsPlaying)
+        {
+            IsPlaying = false;
+            isPaused = true;
+            pauseObject?.SetActive(true);
+            Time.timeScale = 0f;
+        }
+        if (Input.GetKeyUp(KeyCode.Space) && isPaused)
+        {
+            IsPlaying = true;
+            pauseObject?.SetActive(false);
+            Time.timeScale = 1f;
+        }
     }
 
     private void SceneManager_sceneLoaded(Scene loadedScene, LoadSceneMode mode)
@@ -60,23 +84,31 @@ public class GameManager : Singleton<GameManager>
             playerController.JumpKey = JumpKey;
             playerController.RightKey = RightKey;
             playerController.LeftKey = LeftKey;
+
+            GameOverMenu[] gameOverMenuArr = (Resources.FindObjectsOfTypeAll(typeof(GameOverMenu)) as GameOverMenu[]);
+
+            if (gameOverMenuArr.Length > 0)
+            {
+                gameOverMenuArr[0].TryGetComponent<GameOverMenu>(out gameOverMenu);
+            }
+
+            GameObject[] pauseTextArr = (Resources.FindObjectsOfTypeAll(typeof(TextMeshProUGUI)) as GameObject[]);
+
+            pauseObject = pauseTextArr.First(obj => obj.tag == "PauseText");
         }
 
         setActiveComponents(false);
 
         GameObject.FindWithTag("FadeScreen")?.TryGetComponent<IFadeScreen>(out fadeScreen);
-        GameOverMenu[] tempArr = (Resources.FindObjectsOfTypeAll(typeof(GameOverMenu)) as GameOverMenu[]);
-
-        if (tempArr.Length > 0)
-        {
-            tempArr[0].TryGetComponent<GameOverMenu>(out gameOverMenu);
-        }
+        
 
         if (fadeScreen != null)
         {
             fadeScreen.Faded += FadeScreen_Faded;
             fadeScreen.Fading += FadeScreen_Fading;
         }
+
+        sceneWithPause = loadedScene.name == "GameScene";
 
         IsPlaying = true;
         resetGameOnPrograss = false;
