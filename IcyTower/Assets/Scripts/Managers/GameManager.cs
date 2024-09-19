@@ -42,6 +42,8 @@ public class GameManager : Singleton<GameManager>
 
     protected override void OnDestroy()
     {
+        SceneManager.sceneLoaded -= SceneManager_sceneLoaded;
+
         base.OnDestroy();
 
         if (playerController != null)

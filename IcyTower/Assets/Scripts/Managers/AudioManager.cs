@@ -19,7 +19,10 @@ public class AudioManager : MonoBehaviour
 
     private void OnDestroy()
     {
-        GameManager.Instance.AudioVolumeChanged -= setVolume;
+        if(GameManager.Instance != null)
+        {
+            GameManager.Instance.AudioVolumeChanged -= setVolume;
+        }
     }
 
     private IEnumerator fadeInAudio(AudioSource source)

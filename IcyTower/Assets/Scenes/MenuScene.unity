@@ -3098,6 +3098,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6085310477581397575, guid: a43e33609db763143a639fcb090fa0ea, type: 3}
+      propertyPath: seconds
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6355641180713852140, guid: a43e33609db763143a639fcb090fa0ea, type: 3}
       propertyPath: m_Name
       value: ChangeScenePanel
