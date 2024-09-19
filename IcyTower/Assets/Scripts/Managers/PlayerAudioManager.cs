@@ -13,6 +13,13 @@ public class PlayerAudioManager : MonoBehaviour
     private void Start()
     {
         jumper.Jumped += playJumpAudio;
+        GameManager.Instance.AudioVolumeChanged += setVolume;
+        playerAudio.volume = GameManager.Instance.AudioVolume;
+    }
+    private void OnDestroy()
+    {
+        jumper.Jumped -= playJumpAudio;
+        GameManager.Instance.AudioVolumeChanged -= setVolume;
     }
 
     public void playJumpAudio()
@@ -21,4 +28,11 @@ public class PlayerAudioManager : MonoBehaviour
         playerAudio.clip = jumpsClips[index];
         playerAudio.Play();
     }
+
+    private void setVolume(float volume)
+    {
+        playerAudio.volume = volume;
+    }
+
+
 }

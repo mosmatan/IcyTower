@@ -4,18 +4,26 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class BackMenuButton : MonoBehaviour
+public class SceneChanger : MonoBehaviour
 {
     [SerializeField] private IFadeScreen fadeScreen;
     [SerializeField] private AudioManager audioManager;
 
-    public void OnClick()
+    private string nextSceneName;
+
+    private void Start()
     {
-        Time.timeScale = 1.0f;
-        StartCoroutine(backToMenu());
+        fadeScreen.Faded += loadNextScene;
     }
 
-    private IEnumerator backToMenu()
+    public void OnClick(string sceneName)
+    {
+        nextSceneName = sceneName;
+        Time.timeScale = 1.0f;
+        backToMenu();
+    }
+
+    private void backToMenu()
     {
         if (fadeScreen != null)
         {
@@ -24,7 +32,10 @@ public class BackMenuButton : MonoBehaviour
         }
 
         audioManager.sceneFadeOutAudio();
-        yield return new WaitForSeconds(3);
-        SceneManager.LoadScene("MenuScene");
+    }
+
+    private void loadNextScene()
+    {
+        SceneManager.LoadScene(nextSceneName);
     }
 }
