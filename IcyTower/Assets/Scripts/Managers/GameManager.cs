@@ -9,6 +9,7 @@ public class GameManager : Singleton<GameManager>
 
     [SerializeField] private GameObject playerControllerPref;
     [SerializeField] private IFadeScreen fadeScreen;
+    [SerializeField] private GameOverMenu gameOverMenu;
 
     private bool resetGameOnPrograss = false;
     public bool IsPlaying { get; private set; } = true;
@@ -26,13 +27,24 @@ public class GameManager : Singleton<GameManager>
 
     protected override void OnDestroy()
     {
-        if(playerController != null)
+        base.OnDestroy();
+
+        if (playerController != null)
         {
-            Debug.Log("Destroy");
             Destroy(playerController.gameObject);
         }
+    }
 
-        base.OnDestroy();
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (IsPlaying)
+            {
+                IsPlaying = false;
+                gameOverMenu?.gameObject.SetActive(true);
+            }
+        }
     }
 
     private void SceneManager_sceneLoaded(Scene loadedScene, LoadSceneMode mode)
@@ -42,6 +54,7 @@ public class GameManager : Singleton<GameManager>
             if (playerController != null)
             {
                 Destroy(playerController.gameObject);
+                playerController = null;
             }
             playerController = GameObject.Instantiate(playerControllerPref, transform).GetComponent<IPlayerController>();
             playerController.JumpKey = JumpKey;
@@ -52,6 +65,12 @@ public class GameManager : Singleton<GameManager>
         setActiveComponents(false);
 
         GameObject.FindWithTag("FadeScreen")?.TryGetComponent<IFadeScreen>(out fadeScreen);
+        GameOverMenu[] tempArr = (Resources.FindObjectsOfTypeAll(typeof(GameOverMenu)) as GameOverMenu[]);
+
+        if (tempArr.Length > 0)
+        {
+            tempArr[0].TryGetComponent<GameOverMenu>(out gameOverMenu);
+        }
 
         if (fadeScreen != null)
         {
@@ -59,6 +78,7 @@ public class GameManager : Singleton<GameManager>
             fadeScreen.Fading += FadeScreen_Fading;
         }
 
+        IsPlaying = true;
         resetGameOnPrograss = false;
     }
 

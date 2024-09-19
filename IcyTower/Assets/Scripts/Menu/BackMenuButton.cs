@@ -11,6 +11,7 @@ public class BackMenuButton : MonoBehaviour
 
     public void OnClick()
     {
+        Time.timeScale = 1.0f;
         StartCoroutine(backToMenu());
     }
 

@@ -28,6 +28,8 @@ public class Jumper : IJumper
 
     public override float CurrentHeight => gameObject.transform.position.y;
 
+    public override bool IsSuperJumping => isSuperJump;
+
     void Update()
     {
         maxHeight = Math.Max(maxHeight, transform.position.y);
@@ -37,6 +39,7 @@ public class Jumper : IJumper
         if (onFloor && rigidbody.velocity.y <= 0)
         {
             animator.SetBool("SuperJump", false);
+            isSuperJump = false;
         }
     }
 
@@ -52,6 +55,7 @@ public class Jumper : IJumper
             onFloor = false;
             rigidbody.AddForce(new Vector2(0, jumpForce * 2), ForceMode2D.Impulse);
             animator.SetBool("SuperJump", true);
+            isSuperJump = true;
             OnJumped();
         }
         else if (onFloor)

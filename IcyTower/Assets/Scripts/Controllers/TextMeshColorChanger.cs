@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -23,7 +22,8 @@ public class TextMeshColorChanger : MonoBehaviour
         while (running)
         {
             textMesh.colorGradient = new VertexGradient(changeColor(0), changeColor(1), changeColor(2), changeColor(3));
-            yield return new WaitForSeconds(1 / 255f);
+            //yield return new WaitForSeconds(1 / 255f);
+            yield return new WaitForSecondsRealtime(1 / 255f);
         }
     }
 

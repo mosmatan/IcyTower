@@ -13,6 +13,7 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 
             // If the instance doesn't exist, find it in the scene
             _instance = FindObjectOfType<T>();
+            Debug.Log(_instance.gameObject.name);
 
             if (_instance == null)
             {
@@ -27,17 +28,14 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 
     protected virtual void Awake()
     {
-        Debug.Log("Hello");
         if (Instance != this)
         {
-            Debug.Log("World");
             Destroy(gameObject);
         }
     }
 
     protected virtual void OnDestroy()
     {
-        Debug.Log("Bye");
         if (_instance == this)
         {
             _instance = null;

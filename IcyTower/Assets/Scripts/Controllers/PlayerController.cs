@@ -34,11 +34,11 @@ public class PlayerController : IPlayerController
             xAxis = -1;
         }
 
-        jumper.Move(xAxis);
+        jumper?.Move(xAxis);
 
         if (Input.GetKeyDown(JumpKey))
         {
-            jumper.Jump();
+            jumper?.Jump();
         }
     }
 }

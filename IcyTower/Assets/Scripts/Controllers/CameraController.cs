@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 public class CameraController : MonoBehaviour
 {
     [SerializeField] private IJumper jumper;
+    [SerializeField] private GameOverMenu gameOverMenu;
 
     // Update is called once per frame
     void Update()
@@ -14,10 +15,9 @@ public class CameraController : MonoBehaviour
             transform.position = new Vector3(0, jumper.MaxHeight, transform.position.z);
         }
 
-        else if (transform.position.y > jumper.CurrentHeight + 5)
+        else if (transform.position.y > jumper.CurrentHeight + 6)
         {
-            //transform.position = new Vector3(0, jumper.CurrentHeight + 1, -10);
-            GameManager.Instance.ResetGame();
+            gameOverMenu.gameObject.SetActive(true);
         }
     }
 
