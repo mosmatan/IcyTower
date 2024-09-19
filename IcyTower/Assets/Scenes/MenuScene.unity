@@ -633,6 +633,7 @@ GameObject:
   - component: {fileID: 696327315}
   - component: {fileID: 696327314}
   - component: {fileID: 696327316}
+  - component: {fileID: 696327317}
   m_Layer: 5
   m_Name: STSelctor
   m_TagString: Selector
@@ -709,7 +710,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8ecd2e0970b92a41b2dc7e8d2252f8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeOffset: 0.5
+  changer: {fileID: 696327317}
+--- !u!114 &696327317
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 696327312}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88c7ec98793767642a3692932ab8f37c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   fadeScreen: {fileID: 134282165}
   audioManager: {fileID: 635621556}
 --- !u!1 &742613656
