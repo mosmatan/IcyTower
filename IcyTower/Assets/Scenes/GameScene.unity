@@ -365,7 +365,7 @@ MonoBehaviour:
   collider: {fileID: 50197650}
   jumpForce: 10
   speed: 7
-  superJumpWindow: 0.1
+  superJumpWindow: 0.15
   animator: {fileID: 50197654}
 --- !u!212 &50197652
 SpriteRenderer:
@@ -565,7 +565,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerAudio: {fileID: 50197655}
   jumpsClips:
-  - {fileID: 8300000, guid: a9e719d354d594ad78e7798bffa8d726, type: 3}
+  - {fileID: 8300000, guid: de68046c77dc5964ead523a338516ee4, type: 3}
   jumper: {fileID: 50197651}
 --- !u!1 &71150227 stripped
 GameObject:
@@ -721,8 +721,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 300, y: 60}
-  m_SizeDelta: {x: 500, y: 100}
+  m_AnchoredPosition: {x: 527, y: 66.36}
+  m_SizeDelta: {x: 950.7097, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &172403558
 MonoBehaviour:
