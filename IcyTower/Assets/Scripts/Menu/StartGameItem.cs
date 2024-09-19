@@ -6,7 +6,7 @@ namespace Assets.Scripts
 {
     public class StartGameItem : SelectableItem
     {
-        [SerializeField] private float timeOffset = 0.5f;
+        [SerializeField] private float timeOffset = 1f;
         [SerializeField] private IFadeScreen fadeScreen;
         [SerializeField] private AudioManager audioManager; 
 
@@ -17,6 +17,7 @@ namespace Assets.Scripts
 
         private IEnumerator changeScene(float seconds)
         {
+            fadeScreen.gameObject.SetActive(true);
             fadeScreen.FadeIn();
             audioManager.sceneFadeOutAudio();
             yield return new WaitForSeconds(seconds + timeOffset);

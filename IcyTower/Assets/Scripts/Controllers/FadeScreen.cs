@@ -46,6 +46,7 @@ public class FadeScreen : IFadeScreen
         }
 
         OnFaded();
+        gameObject.SetActive(false);
     }
 
     public override void FadeIn()

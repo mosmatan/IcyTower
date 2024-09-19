@@ -26,20 +26,24 @@ public class GameManager : Singleton<GameManager>
 
     protected override void OnDestroy()
     {
-        if (playerControllerPref != null)
+        if(playerController != null)
         {
+            Debug.Log("Destroy");
             Destroy(playerController.gameObject);
         }
-        
-        SceneManager.sceneLoaded -= SceneManager_sceneLoaded;
 
         base.OnDestroy();
     }
+
     private void SceneManager_sceneLoaded(Scene loadedScene, LoadSceneMode mode)
     {
         if(loadedScene.name == "GameScene")
         {
-            playerController = GameObject.Instantiate(playerControllerPref).GetComponent<IPlayerController>();
+            if (playerController != null)
+            {
+                Destroy(playerController.gameObject);
+            }
+            playerController = GameObject.Instantiate(playerControllerPref, transform).GetComponent<IPlayerController>();
             playerController.JumpKey = JumpKey;
             playerController.RightKey = RightKey;
             playerController.LeftKey = LeftKey;
@@ -47,7 +51,7 @@ public class GameManager : Singleton<GameManager>
 
         setActiveComponents(false);
 
-        fadeScreen = GameObject.FindWithTag("FadeScreen").GetComponent<IFadeScreen>();
+        GameObject.FindWithTag("FadeScreen")?.TryGetComponent<IFadeScreen>(out fadeScreen);
 
         if (fadeScreen != null)
         {
@@ -92,9 +96,9 @@ public class GameManager : Singleton<GameManager>
     {
         if (fadeScreen != null)
         {
-            float seconds = (float)fadeScreen.Seconds;
+            fadeScreen.gameObject.SetActive(true);
             fadeScreen.FadeIn();
-            yield return new WaitForSeconds(seconds + 1f);
+            yield return new WaitForSeconds(fadeScreen.Seconds + 1f);
         }
 
         Destroy(playerController.gameObject);

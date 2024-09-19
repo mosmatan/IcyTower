@@ -37,6 +37,7 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 
     protected virtual void OnDestroy()
     {
+        Debug.Log("Bye");
         if (_instance == this)
         {
             _instance = null;
