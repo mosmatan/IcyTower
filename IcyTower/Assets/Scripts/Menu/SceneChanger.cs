@@ -36,6 +36,9 @@ public class SceneChanger : MonoBehaviour
 
     private void loadNextScene()
     {
-        SceneManager.LoadScene(nextSceneName);
+        if (!string.IsNullOrEmpty(nextSceneName))
+        {
+            SceneManager.LoadScene(nextSceneName);
+        }
     }
 }
