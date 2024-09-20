@@ -569,6 +569,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerAudio: {fileID: 50197655}
   jumpsClips:
+  - {fileID: 8300000, guid: bd77888facd461b44a6e671ae8e143a5, type: 3}
+  - {fileID: 8300000, guid: 536b2bd004fa9004c86ea85c028a45ba, type: 3}
   - {fileID: 8300000, guid: de68046c77dc5964ead523a338516ee4, type: 3}
   jumper: {fileID: 50197651}
 --- !u!1 &71150227 stripped
