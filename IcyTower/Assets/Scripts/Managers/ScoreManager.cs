@@ -22,8 +22,13 @@ public class ScoreManager : IScoreManager
     {
         foreach (var brick in bricks)
         {
-            brick.PlayerPass += countScore;
+            brick.PlayerPass += Brick_PlayerPass;
         }
+    }
+
+    private void Brick_PlayerPass()
+    {
+        countScore();
     }
 
     private void countScore()

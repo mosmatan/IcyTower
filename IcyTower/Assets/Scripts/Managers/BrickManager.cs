@@ -4,21 +4,26 @@ using UnityEngine;
 public class BrickManager : MonoBehaviour
 {
     [SerializeField] private List<Brick> bricks = new List<Brick>();
+    [SerializeField] private List<Sprite> sprites = new List<Sprite>();
     [SerializeField] private IJumper jumper;
 
     [SerializeField] private float nextObjectHeight;
     [SerializeField] private float offsetUnder;
     [SerializeField] private int boundries;
+    [SerializeField] private int changeLevel;
 
     private IRelativePositionManager positionManager;
 
+    public int ChangeLevel => (changeLevel / 10) * 10;
+
     private void Awake()
     {
+        setPositionManager();
 
-        positionManager = new JumperRelativePositionManager(bricks.ConvertAll(brick => brick.gameObject));
-        positionManager.Boundries = boundries;
-        positionManager.NextObjectDelta = nextObjectHeight;
-        positionManager.MoveOffset = offsetUnder;
+        foreach (Brick brick in bricks)
+        {
+            brick.PositionChanged += Brick_PositionChanged;
+        }
     }
 
     private void Start()
@@ -30,6 +35,14 @@ public class BrickManager : MonoBehaviour
     {
         positionManager.MoveObject();
         EnableCollidersBasedOnPosition();
+    }
+
+    private void setPositionManager()
+    {
+        positionManager = new JumperRelativePositionManager(bricks.ConvertAll(brick => brick.gameObject));
+        positionManager.Boundries = boundries;
+        positionManager.NextObjectDelta = nextObjectHeight;
+        positionManager.MoveOffset = offsetUnder;
     }
 
     private void HandleMovedObject(GameObject brick)
@@ -68,5 +81,10 @@ public class BrickManager : MonoBehaviour
                 brick.SetActiveCollider(false);
             }
         }
+    }
+
+    private void Brick_PositionChanged(Brick sender, int times)
+    {
+        sender.Sprite = sprites[(times / (ChangeLevel / 10)) % sprites.Count];
     }
 }

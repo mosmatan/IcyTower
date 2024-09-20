@@ -6,15 +6,19 @@ using UnityEngine;
 public class Brick : MonoBehaviour
 {
     public event Action PlayerPass;
-    public event Action PositionChanged;
-    
+    public event Action<Brick, int> PositionChanged;
+
     private RaycastHit2D hitRight;
     private RaycastHit2D hitLeft;
     private bool countScoreMode = true;
+    private int positionChangeCounter = -1;
     
-    [SerializeField] Collider2D collider;
+
+    [SerializeField] private Collider2D collider;
+    [SerializeField] private SpriteRenderer spriteRenderer;
 
     public Collider2D Collider => collider;
+    public Sprite Sprite { get { return spriteRenderer.sprite; } set { spriteRenderer.sprite = value; } }
 
     public void SetActiveCollider(bool  active)
     {
@@ -62,9 +66,16 @@ public class Brick : MonoBehaviour
 
     protected virtual void OnPositionChanged()
     {
+        positionChangeCounter++;
+
         if(PositionChanged != null)
         {
-            PositionChanged();
+            PositionChanged(this, positionChangeCounter);
         }
+    }
+
+    public void AddPostionChangedTime()
+    {
+        positionChangeCounter++;
     }
 }

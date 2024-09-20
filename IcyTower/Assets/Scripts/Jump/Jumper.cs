@@ -16,6 +16,7 @@ public class Jumper : IJumper
     [SerializeField] private float speed = 5;
     [SerializeField] private float superJumpWindow = 0.1f;
     [SerializeField] private Animator animator;
+
     private bool onFloor = true;
     private float maxHeight = 0;
     private int xDirection = 0;
