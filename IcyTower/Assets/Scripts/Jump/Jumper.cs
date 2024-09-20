@@ -16,6 +16,8 @@ public class Jumper : IJumper
     [SerializeField] private float speed = 5;
     [SerializeField] private float superJumpWindow = 0.1f;
     [SerializeField] private Animator animator;
+    [SerializeField] private ObjectPooler pooler;
+    [SerializeField] private int starsPerFrame;
 
     private bool onFloor = true;
     private float maxHeight = 0;
@@ -34,19 +36,32 @@ public class Jumper : IJumper
     void Update()
     {
         maxHeight = Math.Max(maxHeight, transform.position.y);
-        animator.SetFloat("XVelocity", math.abs(rigidbody.velocity.x));
-        animator.SetFloat("YVelocity", rigidbody.velocity.y);
 
-        if (onFloor && rigidbody.velocity.y <= 0)
-        {
-            animator.SetBool("SuperJump", false);
-            isSuperJump = false;
-        }
+        updateAnimationParams();
+        throwStars();
+        updateStopSuperJump();
     }
 
     private void FixedUpdate()
     {
         rigidbody.AddForce(new Vector2(speed * multiSpeedConst * xDirection * Time.deltaTime, 0), ForceMode2D.Force);
+    }
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Brick")
+        {
+            onFloor = false;
+            isSuperJumpWindowOpen = false;
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Brick")
+        {
+            StartCoroutine(SuperJumpTimer());
+            onFloor = true;
+        }
     }
 
     public override void Jump()
@@ -77,24 +92,31 @@ public class Jumper : IJumper
         }
     }
 
-    private void OnCollisionExit2D(Collision2D collision)
+    private void throwStars()
     {
-        if (collision.gameObject.tag == "Brick")
+        if(isSuperJump)
         {
-            onFloor = false;
-            isSuperJumpWindowOpen = false;
+            for(int i = 0;i<starsPerFrame;i++)
+            {
+                GameObject star = pooler.DrawObjectFrom("Stars");
+                star.transform.SetPositionAndRotation(transform.position, transform.rotation);
+            }
         }
     }
-
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void updateAnimationParams()
     {
-        if(collision.gameObject.tag == "Brick")
-        {
-            StartCoroutine(SuperJumpTimer());
-            onFloor = true;
-        }
+        animator.SetFloat("XVelocity", math.abs(rigidbody.velocity.x));
+        animator.SetFloat("YVelocity", rigidbody.velocity.y);
     }
 
+    private void updateStopSuperJump()
+    {
+        if (onFloor && rigidbody.velocity.y <= 0)
+        {
+            animator.SetBool("SuperJump", false);
+            isSuperJump = false;
+        }
+    }
     private IEnumerator SuperJumpTimer()
     {
         isSuperJumpWindowOpen = true;
