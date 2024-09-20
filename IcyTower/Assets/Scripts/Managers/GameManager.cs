@@ -115,6 +115,7 @@ public class GameManager : Singleton<GameManager>
 
         if (fadeScreen != null)
         {
+            isPlaying = false;
             fadeScreen.Faded += FadeScreen_Faded;
             fadeScreen.Fading += FadeScreen_Fading;
         }
@@ -165,11 +166,13 @@ public class GameManager : Singleton<GameManager>
     private void FadeScreen_Fading()
     {
         setActiveComponents(false);
+        IsPlaying = false;
     }
 
     private void FadeScreen_Faded()
     {
         setActiveComponents(true);
+        IsPlaying = true;
     }
 
     private void setActiveComponents(bool active)

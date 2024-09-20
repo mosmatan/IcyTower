@@ -1,29 +1,26 @@
 using System.Collections;
-using System.Threading;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Assets.Scripts;
 using System;
 
 public class FadeScreen : IFadeScreen
 {
-    private const float stepsToChange = 1 / 255f;
-
     public override event Action Faded;
     public override event Action Fading;
 
     [SerializeField] private Image image;
-    [SerializeField] private int seconds = 1;
+    [SerializeField] private float seconds = 1;
     [SerializeField] Color color;
 
     private bool isFading = false;
+    private float stepsToChange;
+    public override float Seconds => seconds;
 
-    public override int Seconds => seconds;
-
-    private void Awake()
+    private void Start()
     {
         image.color = color;
+        stepsToChange = 1 / (255f * seconds);
         FadeOut();
     }
 
@@ -53,8 +50,8 @@ public class FadeScreen : IFadeScreen
     {
         if (!isFading)
         {
-            StartCoroutine(fadeIn());
             OnFading();
+            StartCoroutine(fadeIn());
         }
     }
 

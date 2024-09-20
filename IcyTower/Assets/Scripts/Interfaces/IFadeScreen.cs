@@ -7,7 +7,7 @@ namespace Assets.Scripts
     {
         public abstract event Action Faded;
         public abstract event Action Fading;
-        public abstract int Seconds { get; }
+        public abstract float Seconds { get; }
 
         public abstract void FadeIn();
         public abstract void FadeOut();
