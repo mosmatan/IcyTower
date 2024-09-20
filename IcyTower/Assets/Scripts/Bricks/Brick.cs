@@ -27,15 +27,11 @@ public class Brick : MonoBehaviour
 
     private void Update()
     {
-        if(transform.hasChanged)
-        {
-            OnPositionChanged();
-            transform.hasChanged = false;
-            countScoreMode = true;
-        }
+        handlePositionChange();
+        handlePlayerPass();
     }
 
-    private void FixedUpdate()
+    private void handlePlayerPass()
     {
         hitRight = Physics2D.Raycast(transform.position, transform.right);
         hitLeft = Physics2D.Raycast(transform.position, -transform.right);
@@ -53,6 +49,16 @@ public class Brick : MonoBehaviour
                 countScoreMode = false;
                 OnPlayerPass();
             }
+        }
+    }
+
+    private void handlePositionChange()
+    {
+        if (transform.hasChanged)
+        {
+            OnPositionChanged();
+            transform.hasChanged = false;
+            countScoreMode = true;
         }
     }
 
