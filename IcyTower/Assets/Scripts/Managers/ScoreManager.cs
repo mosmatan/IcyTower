@@ -1,66 +1,64 @@
 using Assets.Scripts;
 using Assets.Scripts.Interfaces;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
+/// <summary>
+/// Manages the player's score, floors, and combo states.
+/// </summary>
 public class ScoreManager : IScoreManager
 {
-    public override event Action<int> ComboChanged;
+    public override event Action<int> ComboChanged; // Event triggered when the combo changes.
 
     [SerializeField] private List<Brick> bricks = new List<Brick>();
-    [SerializeField] private TextMeshProUGUI scoreUI;
-    [SerializeField] private IJumper jumper;
+    [SerializeField] private TextMeshProUGUI scoreUI; // UI element for displaying the score.
+    [SerializeField] private IJumper jumper; // Reference to the jumper interface.
 
-    private int score = 0;
-    private int floor = 0;
-    private int combo = 0;
-    public override int Score => score;
-    public override int Floor => floor;
+    private int score = 0; // Current score.
+    private int floor = 0; // Current floor count.
+    private int combo = 0; // Current combo count.
+
+    public override int Score => score; 
+    public override int Floor => floor; 
     public override int Combo => combo;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         foreach (var brick in bricks)
         {
-            brick.PlayerPass += Brick_PlayerPass;
+            brick.PlayerPass += Brick_PlayerPass; // Subscribe to PlayerPass event.
         }
     }
 
     private void Brick_PlayerPass()
     {
-        countScore();
+        countScore(); // Update score when the player passes a brick.
     }
 
     private void countScore()
     {
-        score++;
-        floor++;
+        score++; 
+        floor++; 
 
         if (jumper.IsSuperJumping)
         {
-            score++;
-            combo++;
-
-            OnComboChanged();
+            score++; // Additional score for super jumping.
+            combo++; // Increment combo count.
+            OnComboChanged(); // Notify combo change.
         }
         else if (combo != 0)
         {
-            combo = 0;
+            combo = 0; // Reset combo if not jumping.
             OnComboChanged();
         }
 
-        scoreUI.text = $"Score: {score}";
+        scoreUI.text = $"Score: {score}"; // Update score display.
     }
 
     protected override void OnComboChanged()
     {
-        if(ComboChanged != null)
-        {
-            ComboChanged(combo);
-        }
+        ComboChanged?.Invoke(combo); // Trigger ComboChanged event.
     }
 }

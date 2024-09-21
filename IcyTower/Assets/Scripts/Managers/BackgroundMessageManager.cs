@@ -5,96 +5,94 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
+/// <summary>
+/// Manages and displays background messages based on player combos.
+/// </summary>
 public class BackgroundMessageManager : MonoBehaviour
 {
     [Serializable]
     public class BackgroundMessage
     {
-        public string message;
-        public int combo;
+        public string message; // The message to display.
+        public int combo; // Combo threshold for the message.
     }
 
-    [SerializeField] private List<BackgroundMessage> messageList= new List<BackgroundMessage>();
-    [SerializeField] private TextMeshPro textMesh;
-    [SerializeField] private Transform textTransform;
-    [SerializeField] private IScoreManager scoreManager;
-    [SerializeField] private Camera gameCamera;
+    [SerializeField] private List<BackgroundMessage> messageList = new List<BackgroundMessage>(); // List of messages.
+    [SerializeField] private TextMeshPro textMesh; 
+    [SerializeField] private Transform textTransform; 
+    [SerializeField] private IScoreManager scoreManager; // Reference to the score manager.
+    [SerializeField] private Camera gameCamera; // Reference to the game camera.
 
-    private LinkedList<BackgroundMessage> messagesLinkedList = new LinkedList<BackgroundMessage>();
-    private LinkedListNode<BackgroundMessage> currentMessage;
-    private bool isShowMessage = false;
-    private int combo;
+    private LinkedList<BackgroundMessage> messagesLinkedList = new LinkedList<BackgroundMessage>(); 
+    private LinkedListNode<BackgroundMessage> currentMessage; 
+    private bool isShowMessage = false; // Is a message currently being shown?
+    private int combo; // Current combo value.
 
     private void Awake()
     {
         foreach (BackgroundMessage message in messageList)
         {
-            messagesLinkedList.AddLast(message);
+            messagesLinkedList.AddLast(message); // Populate the linked list with messages.
         }
 
-        currentMessage = messagesLinkedList.First;
+        currentMessage = messagesLinkedList.First; // Set the first message as current.
     }
 
     private void Start()
     {
-        scoreManager.ComboChanged += ScoreManager_ComboChanged;
+        scoreManager.ComboChanged += ScoreManager_ComboChanged; // Subscribe to combo changes.
     }
 
     private void ScoreManager_ComboChanged(int comb)
     {
-        combo = comb;
-        showMessages();
+        combo = comb; 
+        showMessages(); 
     }
 
     private void showMessages()
     {
         if (combo == 0)
         {
-            currentMessage = messagesLinkedList.First;
+            currentMessage = messagesLinkedList.First; // Reset to first message if combo is zero.
         }
         else if (currentMessage?.Value?.combo <= combo)
-        {   
-            showMessage(currentMessage.Value);
-            currentMessage = currentMessage.Next;
+        {
+            showMessage(currentMessage.Value); // Show current message if combo threshold is met.
+            currentMessage = currentMessage.Next; 
         }
     }
 
     private void showMessage(BackgroundMessage message)
     {
-        Debug.Log($"message: {message.message}");
-
         if (!isShowMessage)
         {
-            isShowMessage = true;
-            float messageRelativeCamera = -2;
+            isShowMessage = true; 
+            float messageRelativeCamera = -2; // Initial vertical offset.
 
-            textTransform.gameObject.SetActive(true);
-            textMesh.text = message.message;
-            textTransform.position = gameCamera.ScreenToWorldPoint(new Vector3(0, 0, 10)) + (Vector3.up * messageRelativeCamera);
+            textTransform.gameObject.SetActive(true); 
+            textMesh.text = message.message; 
+            textTransform.position = gameCamera.ScreenToWorldPoint(new Vector3(0, 0, 10)) + (Vector3.up * messageRelativeCamera); // Position the message.
 
-            StartCoroutine(moveMessageUp(messageRelativeCamera));
+            StartCoroutine(moveMessageUp(messageRelativeCamera)); // Start moving the message up.
         }
     }
 
-    private IEnumerator moveMessageUp(float reletiveCamera)
+    private IEnumerator moveMessageUp(float relativeCamera)
     {
         float yCameraPos;
         do
         {
-            yCameraPos = gameCamera.ScreenToWorldPoint(new Vector3(0, Screen.height, 10)).y;
+            yCameraPos = gameCamera.ScreenToWorldPoint(new Vector3(0, Screen.height, 10)).y; 
 
-            reletiveCamera += 0.05f;
+            relativeCamera += 0.05f; // Increment the vertical offset.
 
-            textTransform.position = gameCamera.ScreenToWorldPoint(new Vector3(Screen.width / 2, 0, 10)) + (Vector3.up * reletiveCamera);
-
+            textTransform.position = gameCamera.ScreenToWorldPoint(new Vector3(Screen.width / 2, 0, 10)) + (Vector3.up * relativeCamera); // Update position.
 
             yield return new WaitForSeconds(0.01f);
         }
-        while (textTransform.position.y < yCameraPos + 1f);
+        while (textTransform.position.y < yCameraPos + 1f); // Continue until the message is above the camera view.
 
-        textTransform.gameObject.SetActive(false);
-        isShowMessage = false;
+        textTransform.gameObject.SetActive(false); // Deactivate the message text.
+        isShowMessage = false; 
     }
-
-    
 }

@@ -1,11 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerAgainButton : MonoBehaviour
+public class PlayerAgain : MonoBehaviour
 {
-    [SerializeField] 
-
     public void OnClick()
     {
         Time.timeScale = 1.0f;

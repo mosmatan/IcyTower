@@ -1,69 +1,59 @@
 using Assets.Scripts;
 using System.Collections.Generic;
 using UnityEngine;
+
+/// <summary>
+/// Manages the positioning and state of bricks in the game.
+/// </summary>
 public class BrickManager : MonoBehaviour
 {
-    [SerializeField] private List<Brick> bricks = new List<Brick>();
-    [SerializeField] private List<Sprite> sprites = new List<Sprite>();
-    [SerializeField] private IJumper jumper;
+    [SerializeField] private List<Brick> bricks = new List<Brick>(); 
+    [SerializeField] private List<Sprite> sprites = new List<Sprite>(); 
+    [SerializeField] private IJumper jumper; // Reference to the jumper interface.
 
-    [SerializeField] private float nextObjectHeight;
-    [SerializeField] private float offsetUnder;
-    [SerializeField] private int boundries;
-   
-    private int changeLevel;
+    [SerializeField] private float nextObjectHeight; // Height for the next brick placement.
+    [SerializeField] private float offsetUnder; // Offset for positioning bricks.
+    [SerializeField] private int boundries; // Boundary for positioning.
 
+    private int changeLevel; 
     private IRelativePositionManager positionManager;
 
     private void Awake()
     {
-        setPositionManager();
+        setPositionManager(); 
 
         foreach (Brick brick in bricks)
         {
-            brick.PositionChanged += Brick_PositionChanged;
+            brick.PositionChanged += Brick_PositionChanged; // Subscribe to position change events.
         }
     }
 
     private void Start()
     {
-        changeLevel = GameManager.Instance.FloorsForLevel;
-        DisableAllColliders();
+        changeLevel = GameManager.Instance.FloorsForLevel; // Set the change level from the game manager.
+        DisableAllColliders(); // Disable colliders for all bricks.
     }
 
-    void Update()
+    private void Update()
     {
-        positionManager.MoveObject();
+        positionManager.MoveObject(); // Update brick positions.
         EnableCollidersBasedOnPosition();
     }
 
     private void setPositionManager()
     {
+        // Initialize the position manager with the list of bricks.
         positionManager = new JumperRelativePositionManager(bricks.ConvertAll(brick => brick.gameObject));
         positionManager.Boundries = boundries;
         positionManager.NextObjectDelta = nextObjectHeight;
         positionManager.MoveOffset = offsetUnder;
     }
 
-    private void HandleMovedObject(GameObject brick)
-    {
-        DisableCollider(brick);
-    }
-
     private void DisableAllColliders()
     {
         foreach (Brick brick in bricks)
         {
-            brick.SetActiveCollider(false);
-        }
-    }
-
-    private void DisableCollider(GameObject brick)
-    {
-        Collider2D collider = brick.GetComponent<Collider2D>();
-        if (collider != null)
-        {
-            collider.enabled = false;
+            brick.SetActiveCollider(false); 
         }
     }
 
@@ -71,7 +61,7 @@ public class BrickManager : MonoBehaviour
     {
         foreach (Brick brick in bricks)
         {
-            // Enable collider if brick is in its correct position
+            // Enable collider if brick is in the correct position.
             if (jumper.MinBoundaryY >= brick.Collider.bounds.max.y)
             {
                 brick.SetActiveCollider(true);
@@ -85,6 +75,7 @@ public class BrickManager : MonoBehaviour
 
     private void Brick_PositionChanged(Brick sender, int times)
     {
+        // Change the sprite of the brick based on the number of times its position has changed.
         sender.Sprite = sprites[(times / (changeLevel / 10)) % sprites.Count];
     }
 }

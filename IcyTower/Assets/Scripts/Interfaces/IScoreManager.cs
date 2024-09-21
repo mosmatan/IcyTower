@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using UnityEngine.Rendering.VirtualTexturing;
 
 namespace Assets.Scripts.Interfaces
 {

@@ -1,5 +1,4 @@
-﻿
-namespace Assets.Scripts
+﻿namespace Assets.Scripts
 {
     public interface ISelectableItem
     {

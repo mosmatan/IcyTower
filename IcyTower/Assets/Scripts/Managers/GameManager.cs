@@ -2,140 +2,147 @@ using Assets.Scripts;
 using System;
 using System.Collections;
 using System.Linq;
-using System.Runtime.InteropServices;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+/// <summary>
+/// Manages game state, audio, player controller, and scene transitions.
+/// </summary>
 public class GameManager : Singleton<GameManager>
 {
-    public event Action<float> AudioVolumeChanged;
+    public event Action<float> AudioVolumeChanged; // Event for audio volume changes.
 
-    private IPlayerController playerController;
+    private IPlayerController playerController; // Reference to the player controller.
 
-    [SerializeField] private GameObject playerControllerPref;
-    [SerializeField] private IFadeScreen fadeScreen;
-    [SerializeField] private GameOverMenu gameOverMenu;
-    [SerializeField] private GameObject pauseObject;
-    [SerializeField] private int floorsForLevel = 100;
+    [SerializeField] private GameObject playerControllerPref; 
+    [SerializeField] private IFadeScreen fadeScreen; // Reference to fade screen.
+    [SerializeField] private GameOverMenu gameOverMenu; // Reference to game over menu.
+    [SerializeField] private GameObject pauseObject; // UI object for pause.
+    [SerializeField] private int floorsForLevel = 100; // Floors for each level.
 
-    private bool resetGameOnPrograss = false;
-    private bool sceneWithPause = false;
-    private bool isPlaying = true;
-    private bool isPaused = false;
-    private float audioVolume = 1;
-    public bool IsPlaying 
+    private bool resetGameOnProgress = false; // Flag for resetting game.
+    private bool sceneWithPause = false; 
+    private bool isPlaying = true; 
+    private bool isPaused = false; 
+    private float audioVolume = 1; // Current audio volume level.
+
+    private bool IsPlaying 
     {
-        get { return isPlaying && !isPaused; }
-        private set { isPlaying = value; isPaused = value ? false : isPaused; }
+        get { return isPlaying && !isPaused; } 
+        set { isPlaying = value; isPaused = !value; }
     }
-    public float AudioVolume { get { return audioVolume; } set { audioVolume = value; OnAudioVolumeChanged(); } }
 
-    public int FloorsForLevel => (floorsForLevel / 10) * 10;
+    public float AudioVolume 
+    { 
+        get { return audioVolume; } 
+        set { audioVolume = value; OnAudioVolumeChanged(); } 
+    }
 
-    public KeyCode RightKey { get; set; } = KeyCode.RightArrow;
-    public KeyCode LeftKey { get; set; } = KeyCode.LeftArrow;
-    public KeyCode JumpKey { get; set; } = KeyCode.Space;
-    public MenuSelector SceneMenu { get; set; } = null;
+    public int FloorsForLevel => (floorsForLevel / 10) * 10; 
+
+    public KeyCode RightKey { get; set; } = KeyCode.RightArrow; // Key for moving right.
+    public KeyCode LeftKey { get; set; } = KeyCode.LeftArrow; // Key for moving left.
+    public KeyCode JumpKey { get; set; } = KeyCode.Space; // Key for jumping.
+    public MenuSelector SceneMenu { get; set; } = null; // Reference to scene menu.
 
     protected override void Awake()
     {
         base.Awake();
-        SceneManager.sceneLoaded += SceneManager_sceneLoaded;
+        SceneManager.sceneLoaded += SceneManager_sceneLoaded; // Subscribe to scene load events.
     }
 
     protected override void OnDestroy()
     {
-        SceneManager.sceneLoaded -= SceneManager_sceneLoaded;
-
+        SceneManager.sceneLoaded -= SceneManager_sceneLoaded; // Unsubscribe from scene load events.
         base.OnDestroy();
 
         if (playerController != null)
         {
-            Destroy(playerController.gameObject);
+            Destroy(playerController.gameObject); 
         }
     }
 
     private void Update()
     {
-        inputController();
+        InputController(); // Handle input for game state.
     }
 
-    private void inputController()
+    private void InputController()
     {
-        gameOverController();
-        pauseController();
+        GameOverController(); // Check for game over conditions.
+        PauseController(); // Check for pause conditions.
     }
 
-    private void gameOverController()
+    private void GameOverController()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (IsPlaying)
             {
-                IsPlaying = false;
+                IsPlaying = false; // Trigger game over.
                 gameOverMenu?.gameObject.SetActive(true);
             }
         }
     }
-    
-    private void pauseController()
+
+    private void PauseController()
     {
         if (Input.GetKeyUp(KeyCode.P) && IsPlaying)
         {
-            IsPlaying = false;
+            IsPlaying = false; // Pause the game.
             isPaused = true;
             pauseObject?.SetActive(true);
-            Time.timeScale = 0f;
+            Time.timeScale = 0f; // Stop the game time.
         }
         if (Input.GetKeyUp(KeyCode.Space) && isPaused)
         {
-            IsPlaying = true;
+            IsPlaying = true; // Resume the game.
             pauseObject?.SetActive(false);
-            Time.timeScale = 1f;
+            Time.timeScale = 1f; // Resume game time.
         }
     }
 
     private void SceneManager_sceneLoaded(Scene loadedScene, LoadSceneMode mode)
     {
-        if(loadedScene.name == "GameScene")
+        if (loadedScene.name == "GameScene")
         {
-            setPlayerController();
-            findGameSceneUI();
+            setPlayerController(); // Set up the player controller for the game scene.
+            findGameSceneUI(); 
         }
 
-        setActiveComponents(false);
-        setSceneVolume();
-        findSceneUI();
+        setActiveComponents(false); 
+        setSceneVolume(); // Set audio volume for the scene.
+        findSceneUI(); 
 
-        sceneWithPause = loadedScene.name == "GameScene";
-        IsPlaying = true;
-        resetGameOnPrograss = false;
+        sceneWithPause = loadedScene.name == "GameScene"; // Determine if the scene supports pause.
+        IsPlaying = true; // Set the game state to playing.
+        resetGameOnProgress = false;
     }
 
+    // Find UI elements for the scene.
     private void findSceneUI()
     {
-        GameObject.FindWithTag("FadeScreen")?.TryGetComponent<IFadeScreen>(out fadeScreen);
+        GameObject.FindWithTag("FadeScreen")?.TryGetComponent<IFadeScreen>(out fadeScreen); // Find fade screen.
 
         if (fadeScreen != null)
         {
-            isPlaying = false;
-            fadeScreen.Faded += FadeScreen_Faded;
+            isPlaying = false; // Disable playing during fade.
+            fadeScreen.Faded += FadeScreen_Faded; // Subscribe to fade events.
             fadeScreen.Fading += FadeScreen_Fading;
         }
     }
 
+    // Find UI elements in the game scene.
     private void findGameSceneUI()
     {
-        GameOverMenu[] gameOverMenuArr = (Resources.FindObjectsOfTypeAll(typeof(GameOverMenu)) as GameOverMenu[]);
-
+        GameOverMenu[] gameOverMenuArr = Resources.FindObjectsOfTypeAll<GameOverMenu>(); // Find game over menu.
         if (gameOverMenuArr.Length > 0)
         {
             gameOverMenuArr[0].TryGetComponent<GameOverMenu>(out gameOverMenu);
         }
 
-        TextMeshProUGUI[] pauseTextArr = Resources.FindObjectsOfTypeAll(typeof(TextMeshProUGUI)) as TextMeshProUGUI[];
-
+        TextMeshProUGUI[] pauseTextArr = Resources.FindObjectsOfTypeAll<TextMeshProUGUI>(); // Find pause text.
         pauseObject = pauseTextArr.First(obj => obj.tag == "PauseText").gameObject;
     }
 
@@ -143,59 +150,58 @@ public class GameManager : Singleton<GameManager>
     {
         if (playerController != null)
         {
-            Destroy(playerController.gameObject);
+            Destroy(playerController.gameObject); // Destroy existing player controller.
         }
-        playerController = GameObject.Instantiate(playerControllerPref, transform).GetComponent<IPlayerController>();
-        playerController.JumpKey = JumpKey;
+        playerController = Instantiate(playerControllerPref, transform).GetComponent<IPlayerController>(); // Instantiate new player controller.
+        playerController.JumpKey = JumpKey; // Set control keys.
         playerController.RightKey = RightKey;
         playerController.LeftKey = LeftKey;
     }
 
     private void setSceneVolume()
     {
-        AudioSource[] audios = Resources.FindObjectsOfTypeAll<AudioSource>();
-        AudioManager[] managers = Resources.FindObjectsOfTypeAll<AudioManager>();
+        AudioSource[] audios = Resources.FindObjectsOfTypeAll<AudioSource>(); // Find all audio sources.
+        AudioManager[] managers = Resources.FindObjectsOfTypeAll<AudioManager>(); // Find all audio managers.
 
         foreach (AudioManager manager in managers)
         {
-            manager.Volume = AudioVolume;
+            manager.Volume = AudioVolume; // Set audio manager volume.
         }
 
         foreach (AudioSource audio in audios)
         {
-            audio.volume = AudioVolume;
+            audio.volume = AudioVolume; // Set audio source volume.
         }
     }
 
     private void FadeScreen_Fading()
     {
-        setActiveComponents(false);
-        IsPlaying = false;
+        setActiveComponents(false); // Disable components during fade.
+        IsPlaying = false; 
     }
 
     private void FadeScreen_Faded()
     {
-        setActiveComponents(true);
-        IsPlaying = true;
+        setActiveComponents(true); // Enable components after fade.
+        IsPlaying = true; 
     }
 
     private void setActiveComponents(bool active)
     {
         if (SceneMenu != null)
         {
-            SceneMenu.isActive = active;
+            SceneMenu.isActive = active; // Activate/deactivate scene menu.
         }
 
-        IsPlaying = active;
+        IsPlaying = active; 
     }
 
     public void ResetGame()
     {
-        if (!resetGameOnPrograss)
+        if (!resetGameOnProgress)
         {
-            resetGameOnPrograss = true;
-
-            StartCoroutine(resetGame());
+            resetGameOnProgress = true; // Set the reset flag.
+            StartCoroutine(resetGame()); 
         }
     }
 
@@ -204,16 +210,17 @@ public class GameManager : Singleton<GameManager>
         if (fadeScreen != null)
         {
             fadeScreen.gameObject.SetActive(true);
-            fadeScreen.FadeIn();
+            fadeScreen.FadeIn(); // Fade in effect before resetting.
             yield return new WaitForSeconds(fadeScreen.Seconds + 1f);
         }
 
-        Destroy(playerController.gameObject);
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        Destroy(playerController.gameObject); // Destroy player controller.
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name); // Reload the current scene.
     }
 
     protected virtual void OnAudioVolumeChanged()
     {
+        // Clamp audio volume between 0 and 1.
         if (audioVolume > 1)
         {
             audioVolume = 1;
@@ -223,9 +230,6 @@ public class GameManager : Singleton<GameManager>
             audioVolume = 0;
         }
 
-        if(AudioVolumeChanged != null)
-        {
-            AudioVolumeChanged(audioVolume);
-        }
+        AudioVolumeChanged?.Invoke(audioVolume); // Trigger volume change event.
     }
 }

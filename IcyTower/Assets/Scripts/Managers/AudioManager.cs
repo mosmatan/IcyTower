@@ -1,60 +1,59 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
+/// <summary>
+/// Manages audio playback and volume for the game.
+/// </summary>
 public class AudioManager : MonoBehaviour
 {
-    [SerializeField] private AudioSource scenePlayer;
+    [SerializeField] private AudioSource scenePlayer; // Audio source for playing sound in the scene.
 
-    public float Volume { get; set; } = 1f;
+    public float Volume { get; set; } = 1f; // Current volume level.
     
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        GameManager.Instance.AudioVolumeChanged += setVolume;
-        Volume = GameManager.Instance.AudioVolume;
-        StartCoroutine(fadeInAudio(scenePlayer));
+        GameManager.Instance.AudioVolumeChanged += setVolume; 
+        Volume = GameManager.Instance.AudioVolume; 
+        StartCoroutine(fadeInAudio(scenePlayer)); // Fade in audio at the start.
     }
 
     private void OnDestroy()
     {
-        if(GameManager.Instance != null)
+        if (GameManager.Instance != null)
         {
-            GameManager.Instance.AudioVolumeChanged -= setVolume;
+            GameManager.Instance.AudioVolumeChanged -= setVolume; // Unsubscribe from volume change event.
         }
     }
 
     private IEnumerator fadeInAudio(AudioSource source)
     {
-        source.volume = 0;
+        source.volume = 0; 
 
         while (source.volume < Volume)
         {
-            source.volume += 0.2f;
-            yield return new WaitForSeconds(0.2f);
+            source.volume += 0.2f; // Increment volume.
+            yield return new WaitForSeconds(0.2f); 
         }
 
-        source.volume = Volume;
+        source.volume = Volume; // Ensure final volume is set.
     }
-    
+
     private IEnumerator fadeOutAudio(AudioSource source)
     {
         while (source.volume > 0)
         {
-            source.volume -= 0.2f;
-            yield return new WaitForSeconds(0.2f);
+            source.volume -= 0.2f; // Decrement volume.
+            yield return new WaitForSeconds(0.2f); 
         }
     }
 
     public void sceneFadeOutAudio()
     {
-        StartCoroutine(fadeOutAudio(scenePlayer));
+        StartCoroutine(fadeOutAudio(scenePlayer)); 
     }
 
     private void setVolume(float volume)
     {
-        scenePlayer.volume = volume;
+        scenePlayer.volume = volume; // Set audio source volume.
     }
 }

@@ -4,32 +4,36 @@ using UnityEngine.UI;
 using Assets.Scripts;
 using System;
 
+/// <summary>
+/// Handles the fading in and out of a UI screen.
+/// </summary>
 public class FadeScreen : IFadeScreen
 {
-    public override event Action Faded;
-    public override event Action Fading;
+    public override event Action Faded; // Triggered when fading completes.
+    public override event Action Fading; // Triggered when fading starts.
 
-    [SerializeField] private Image image;
-    [SerializeField] private float seconds = 1;
-    [SerializeField] Color color;
+    [SerializeField] private Image image; 
+    [SerializeField] private float seconds = 1; // Duration of the fade.
+    [SerializeField] private Color color; 
 
-    private bool isFading = false;
-    private float stepsToChange;
-    public override float Seconds => seconds;
+    private bool isFading = false; // Tracks if a fade is currently in progress.
+    private float stepsToChange; 
+
+    public override float Seconds => seconds; // Gets the duration.
 
     private void Start()
     {
-        image.color = color;
-        stepsToChange = 1 / (255f * seconds);
-        FadeOut();
+        image.color = color; 
+        stepsToChange = 1 / (255f * seconds); // Calculate change step.
+        FadeOut(); 
     }
 
     public override void FadeOut()
     {
-        if(!isFading)
+        if (!isFading)
         {
-            StartCoroutine(fadeOut());
-            OnFading();
+            StartCoroutine(fadeOut()); // Start fade out coroutine.
+            OnFading(); // Notify that fading has started.
         }
     }
 
@@ -37,21 +41,20 @@ public class FadeScreen : IFadeScreen
     {
         while (image.color.a > 0)
         {
-            image.color =new Color(color.r, color.g, color.b, image.color.a - stepsToChange);
-
-            yield return new WaitForSeconds(seconds / 255f);
+            image.color = new Color(color.r, color.g, color.b, image.color.a - stepsToChange);
+            yield return new WaitForSeconds(seconds / 255f); // Wait for next step.
         }
 
-        OnFaded();
-        gameObject.SetActive(false);
+        OnFaded(); 
+        gameObject.SetActive(false); // Deactivate the game object.
     }
 
     public override void FadeIn()
     {
         if (!isFading)
         {
-            OnFading();
-            StartCoroutine(fadeIn());
+            OnFading(); // Notify that fading has started.
+            StartCoroutine(fadeIn()); // Start fade in coroutine.
         }
     }
 
@@ -60,30 +63,21 @@ public class FadeScreen : IFadeScreen
         while (image.color.a < 1)
         {
             image.color = new Color(color.r, color.g, color.b, image.color.a + stepsToChange);
-
-            yield return new WaitForSeconds(seconds / 255f);
+            yield return new WaitForSeconds(seconds / 255f); // Wait for next step.
         }
 
-        OnFaded();
+        OnFaded(); 
     }
 
     protected override void OnFaded()
     {
-        isFading = false;
-
-        if (Faded != null)
-        {
-            Faded();
-        }
+        isFading = false; 
+        Faded?.Invoke(); // Trigger Faded event.
     }
 
     protected override void OnFading()
     {
-        isFading = true;
-
-        if (Fading != null)
-        {
-            Fading();
-        }
+        isFading = true; 
+        Fading?.Invoke(); // Trigger Fading event.
     }
 }
