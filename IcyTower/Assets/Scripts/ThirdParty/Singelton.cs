@@ -13,7 +13,6 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 
             // If the instance doesn't exist, find it in the scene
             _instance = FindObjectOfType<T>();
-            Debug.Log(_instance.gameObject.name);
 
             if (_instance == null)
             {
