@@ -2,6 +2,7 @@ using Assets.Scripts;
 using System;
 using System.Collections;
 using System.Linq;
+using System.Runtime.InteropServices;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -16,6 +17,7 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] private IFadeScreen fadeScreen;
     [SerializeField] private GameOverMenu gameOverMenu;
     [SerializeField] private GameObject pauseObject;
+    [SerializeField] private int floorsForLevel = 100;
 
     private bool resetGameOnPrograss = false;
     private bool sceneWithPause = false;
@@ -28,6 +30,8 @@ public class GameManager : Singleton<GameManager>
         private set { isPlaying = value; isPaused = value ? false : isPaused; }
     }
     public float AudioVolume { get { return audioVolume; } set { audioVolume = value; OnAudioVolumeChanged(); } }
+
+    public int FloorsForLevel => (floorsForLevel / 10) * 10;
 
     public KeyCode RightKey { get; set; } = KeyCode.RightArrow;
     public KeyCode LeftKey { get; set; } = KeyCode.LeftArrow;

@@ -10,11 +10,10 @@ public class BrickManager : MonoBehaviour
     [SerializeField] private float nextObjectHeight;
     [SerializeField] private float offsetUnder;
     [SerializeField] private int boundries;
-    [SerializeField] private int changeLevel;
+   
+    private int changeLevel;
 
     private IRelativePositionManager positionManager;
-
-    public int ChangeLevel => (changeLevel / 10) * 10;
 
     private void Awake()
     {
@@ -28,6 +27,7 @@ public class BrickManager : MonoBehaviour
 
     private void Start()
     {
+        changeLevel = GameManager.Instance.FloorsForLevel;
         DisableAllColliders();
     }
 
@@ -85,6 +85,6 @@ public class BrickManager : MonoBehaviour
 
     private void Brick_PositionChanged(Brick sender, int times)
     {
-        sender.Sprite = sprites[(times / (ChangeLevel / 10)) % sprites.Count];
+        sender.Sprite = sprites[(times / (changeLevel / 10)) % sprites.Count];
     }
 }

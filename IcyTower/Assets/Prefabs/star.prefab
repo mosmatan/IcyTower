@@ -127,7 +127,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rigidbody: {fileID: 6221173598047569361}
   force: 11
-  lifeTime: 2
+  lifeTime: 1.5
   sprites:
   - {fileID: -1817576301, guid: 076efc64e3858d84392036313ff61b43, type: 3}
   - {fileID: 2117044768, guid: 076efc64e3858d84392036313ff61b43, type: 3}

@@ -7,12 +7,12 @@ public class TextBrick : MonoBehaviour
     [SerializeField] private int value;
     [SerializeField] private Brick brick;
     [SerializeField] private TextMeshPro textMesh;
-    [SerializeField] private int bigBrick;
-
-    public int BigBrick => (bigBrick / 10) * 10;
+    
+    private int bigBrick;
 
     private void Start()
     {
+        bigBrick = GameManager.Instance.FloorsForLevel;
         brick.PositionChanged += Brick_PositionChanged;
         brick.AddPostionChangedTime();
     }
@@ -22,7 +22,7 @@ public class TextBrick : MonoBehaviour
         value += change;
         textMesh.text = value.ToString();
 
-        if (value % BigBrick == 0)
+        if (value % bigBrick == 0)
         {
             sender.transform.position = new Vector3(0, sender.transform.position.y, sender.transform.position.z);
             sender.transform.localScale = new Vector3(13, sender.transform.localScale.y, sender.transform.localScale.z);

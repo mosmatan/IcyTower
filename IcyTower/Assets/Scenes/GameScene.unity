@@ -253,6 +253,10 @@ PrefabInstance:
       propertyPath: pauseObject
       value: 
       objectReference: {fileID: 1574567341}
+    - target: {fileID: 4653747015527690550, guid: ac63d9852a3ea0c4f87ea9828022ff62, type: 3}
+      propertyPath: floorsForLevel
+      value: 50
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2246,7 +2250,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   messageList:
-  - message: Good
+  - message: Good!
     combo: 5
   - message: Sweet!
     combo: 15
@@ -2579,7 +2583,6 @@ MonoBehaviour:
   nextObjectHeight: 27
   offsetUnder: 6
   boundries: 4
-  changeLevel: 50
 --- !u!4 &694078786
 Transform:
   m_ObjectHideFlags: 0
@@ -3427,7 +3430,6 @@ MonoBehaviour:
   value: 0
   brick: {fileID: 806836832}
   textMesh: {fileID: 575796150}
-  bigBrick: 50
 --- !u!1 &1053828011 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 339338538533483465, guid: d42721c8465361446840ca1937756152, type: 3}
@@ -3637,7 +3639,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Dammm
+  m_text: Amazing!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 036e50a983008f84695229cff02d4479, type: 2}
   m_sharedMaterial: {fileID: 644235301692589356, guid: 036e50a983008f84695229cff02d4479, type: 2}
@@ -3664,10 +3666,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 32.4
-  m_fontSizeBase: 36
+  m_fontSize: 15
+  m_fontSizeBase: 15
   m_fontWeight: 400
-  m_enableAutoSizing: 1
+  m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 33
@@ -3700,7 +3702,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 4.17041, y: 0, z: 4.14165, w: 0}
+  m_margin: {x: 6.3426223, y: 0, z: 6.335161, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   _SortingLayer: 0
