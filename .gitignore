@@ -14,6 +14,7 @@ IcyTower/obj
 IcyTower/Temp
 IcyTower/UserSettings
 IcyTower/Library
+IcyTower/connectwebgl.zip
 # Asset meta data should only be ignored when the corresponding asset is also ignored
 !/[Aa]ssets/**/*.meta
 
