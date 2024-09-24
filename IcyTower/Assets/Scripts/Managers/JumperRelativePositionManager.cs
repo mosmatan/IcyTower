@@ -8,9 +8,9 @@ using UnityEngine;
 /// </summary>
 public class JumperRelativePositionManager : IRelativePositionManager
 {
-    private Queue<GameObject> objects = new Queue<GameObject>(); // Queue of objects to manage.
+    //private Queue<GameObject> objects = new Queue<GameObject>(); // Queue of objects to manage.
     private IJumper jumper; // Reference to the jumper interface.
-    private GameObject currentObject; // Currently moving object.
+    //private GameObject currentObject; // Currently moving object.
 
     public event Action<GameObject> MovedObject; // Event triggered when an object is moved.
 
@@ -28,20 +28,23 @@ public class JumperRelativePositionManager : IRelativePositionManager
     private void initialize()
     {
         jumper = GameObject.FindAnyObjectByType<IJumper>(); // Find the jumper in the scene.
-        listToQueue(); 
-        currentObject = objects.Dequeue(); // Set the first object as the current object.
+        //listToQueue(); 
+        //currentObject = objects.Dequeue(); // Set the first object as the current object.
     }
 
     public void MoveObject()
     {
-        // Move the current object if it is below the jumper's max height.
-        if (currentObject.transform.position.y <= jumper.MaxHeight - MoveOffset)
+        foreach (var item in objectsList)
         {
-            float xPosition = UnityEngine.Random.Range(-Boundries, Boundries);
-            currentObject.transform.position = new Vector3(xPosition, currentObject.transform.position.y + NextObjectDelta, currentObject.transform.position.z);
-            OnMovedObject(); // Trigger the moved object event.
-            objects.Enqueue(currentObject); // Add the current object back to the queue.
-            currentObject = objects.Dequeue(); // Update the current object to the next in the queue.
+            // Move the current object if it is below the jumper's max height.
+            if (item.transform.position.y <= jumper.MaxHeight - MoveOffset)
+            {
+                float xPosition = UnityEngine.Random.Range(-Boundries, Boundries);
+                item.transform.position = new Vector3(xPosition, item.transform.position.y + NextObjectDelta, item.transform.position.z);
+                OnMovedObject(item); // Trigger the moved object event.
+                //objects.Enqueue(currentObject); // Add the current object back to the queue.
+                //currentObject = objects.Dequeue(); // Update the current object to the next in the queue.
+            }
         }
     }
 
@@ -50,12 +53,12 @@ public class JumperRelativePositionManager : IRelativePositionManager
         // Enqueue all objects from the list.
         foreach (var brick in objectsList)
         {
-            objects.Enqueue(brick);
+            //objects.Enqueue(brick);
         }
     }
 
-    private void OnMovedObject()
+    private void OnMovedObject(GameObject obj)
     {
-        MovedObject?.Invoke(currentObject); // Trigger the moved object event if there are subscribers.
+        MovedObject?.Invoke(obj); // Trigger the moved object event if there are subscribers.
     }
 }

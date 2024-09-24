@@ -47,6 +47,14 @@ public class BrickManager : MonoBehaviour
         positionManager.Boundries = boundries;
         positionManager.NextObjectDelta = nextObjectHeight;
         positionManager.MoveOffset = offsetUnder;
+        positionManager.MovedObject += PositionManager_OnMovedObject;
+    }
+
+    private void PositionManager_OnMovedObject(GameObject obj)
+    {
+        obj.TryGetComponent(out Brick brick);
+        obj.transform.position = new Vector3(obj.transform.position.x, brick.LastPosition.y + nextObjectHeight, obj.transform.position.z);
+        brick.HandlePositionChange();
     }
 
     private void DisableAllColliders()

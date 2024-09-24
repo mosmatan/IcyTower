@@ -71,11 +71,11 @@ public class Jumper : IJumper
     {
         if (isSuperJumpWindowOpen && rigidbody.velocity.y <= 0)
         {
-            onFloor = false; 
             rigidbody.AddForce(new Vector2(0, jumpForce * 2), ForceMode2D.Impulse); // Apply super jump force.
             animator.SetBool("SuperJump", true); // Trigger super jump animation.
             isSuperJump = true; 
             OnJumped(); // Notify jump event.
+            onFloor = false;
         }
         else if (onFloor)
         {
@@ -115,7 +115,7 @@ public class Jumper : IJumper
 
     private void updateStopSuperJump()
     {
-        if (onFloor && rigidbody.velocity.y <= 0)
+        if (onFloor && rigidbody.velocity.y < 0.1f)
         {
             animator.SetBool("SuperJump", false); 
             isSuperJump = false; 
