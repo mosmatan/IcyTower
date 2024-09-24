@@ -71,11 +71,7 @@ public class Jumper : IJumper
     {
         if (isSuperJumpWindowOpen && rigidbody.velocity.y <= 0)
         {
-            rigidbody.AddForce(new Vector2(0, jumpForce * 2), ForceMode2D.Impulse); // Apply super jump force.
-            animator.SetBool("SuperJump", true); // Trigger super jump animation.
-            isSuperJump = true; 
-            OnJumped(); // Notify jump event.
-            onFloor = false;
+            spicelJump(2);
         }
         else if (onFloor)
         {
@@ -83,6 +79,15 @@ public class Jumper : IJumper
             rigidbody.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse); // Apply normal jump force.
             OnJumped(); // Notify jump event.
         }
+    }
+
+    private void spicelJump(float multiForce)
+    {
+        rigidbody.AddForce(new Vector2(0, jumpForce * multiForce), ForceMode2D.Impulse); // Apply super jump force.
+        animator.SetBool("SuperJump", true); // Trigger super jump animation.
+        isSuperJump = true; 
+        OnJumped(); // Notify jump event.
+        onFloor = false;
     }
 
     public override void Move(int direction)
@@ -132,5 +137,10 @@ public class Jumper : IJumper
     protected override void OnJumped()
     {
         Jumped?.Invoke(); // Invoke the Jumped event.
+    }
+
+    public void UltraJumpBoost(float force)
+    {
+        spicelJump(force);
     }
 }

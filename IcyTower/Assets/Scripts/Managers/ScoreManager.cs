@@ -57,6 +57,12 @@ public class ScoreManager : IScoreManager
         scoreUI.text = $"Score: {score}"; // Update score display.
     }
 
+    public void AddScoreBoost(int scoreBoost)
+    {
+        score += scoreBoost;
+        scoreUI.text = $"Score: {score}";
+    }
+
     protected override void OnComboChanged()
     {
         ComboChanged?.Invoke(combo); // Trigger ComboChanged event.
