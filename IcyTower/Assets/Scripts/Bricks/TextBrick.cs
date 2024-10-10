@@ -9,6 +9,8 @@ public class TextBrick : MonoBehaviour
     [SerializeField] private TextMeshPro textMesh; // Text display component.
     
     private int bigBrick;
+    
+    public int Value => value; 
 
     private void Start()
     {

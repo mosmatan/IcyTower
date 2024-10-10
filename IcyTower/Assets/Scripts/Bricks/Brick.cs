@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Assets.Scripts.Interfaces;
 using UnityEngine;
 
 /// <summary>
@@ -17,20 +18,23 @@ public class Brick : MonoBehaviour
     private Vector3 lastPosition;
     private bool isShaking = false;
     private bool isFalling = false;
+    private int bigBrick;
 
     [SerializeField] private Collider2D collider; 
     [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private float holdShake;
     [SerializeField] private Animator animator;
     [SerializeField] private Rigidbody2D rigidbody;
-    
+    [SerializeField] private TextBrick textBrick;
     public Collider2D Collider => collider; // Gets the collider.
     public Sprite Sprite { get { return spriteRenderer.sprite; } set { spriteRenderer.sprite = value; } } // Gets/sets the sprite.
 
     public Vector3 LastPosition => lastPosition;
+    
     private void Awake()
     {
         lastPosition = transform.position;
+        bigBrick = GameManager.Instance.FloorsForLevel; // Initialize bigBrick.
     }
 
     public void SetActiveCollider(bool active)
@@ -103,9 +107,9 @@ public class Brick : MonoBehaviour
 
     private void handleShake()
     {
-        if (!isShaking)
+        if (!isShaking && (textBrick.Value % bigBrick != 0))
         {
-            isShaking = true; 
+            isShaking = true;
             StartCoroutine(startShake()); // Start the shake coroutine.
         }
     }

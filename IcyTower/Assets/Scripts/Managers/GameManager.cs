@@ -19,7 +19,7 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] private IFadeScreen fadeScreen; // Reference to fade screen.
     [SerializeField] private GameOverMenu gameOverMenu; // Reference to game over menu.
     [SerializeField] private GameObject pauseObject; // UI object for pause.
-    [SerializeField] private int floorsForLevel = 100; // Floors for each level.
+    [SerializeField] private int floorsForLevel = 50; // Floors for each level.
 
     private bool resetGameOnProgress = false; // Flag for resetting game.
     private bool sceneWithPause = false; 
