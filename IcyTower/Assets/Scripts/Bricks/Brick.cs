@@ -95,9 +95,9 @@ public class Brick : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.transform.tag == "Player")
+        if (other.transform.CompareTag("Player"))
         {
-            handleShake();
+            handleShake(); // Trigger shake effect on player collision.
         }
     }
 
@@ -105,30 +105,30 @@ public class Brick : MonoBehaviour
     {
         if (!isShaking)
         {
-            isShaking = true;
-            StartCoroutine(startShake());
+            isShaking = true; 
+            StartCoroutine(startShake()); // Start the shake coroutine.
         }
     }
 
     private IEnumerator startShake()
     {
-        yield return new WaitForSeconds(holdShake);
-        animator.SetTrigger("StartShake");
-        yield return new WaitForSeconds(holdShake);
-        StartCoroutine(falling());
+        yield return new WaitForSeconds(holdShake); // Wait before starting shake.
+        animator.SetTrigger("StartShake"); // Trigger shake animation.
+        yield return new WaitForSeconds(holdShake); // Wait for shake duration.
+        StartCoroutine(falling()); // Start falling coroutine.
     }
 
     private IEnumerator falling()
     {
-        isFalling = true;
-        collider.enabled = false;
+        isFalling = true; 
+        collider.enabled = false; // Disable collider during fall.
 
         while (isShaking)
         {
-            transform.Translate(Vector3.down * Time.deltaTime * 2f);
-            yield return new WaitForFixedUpdate();
+            transform.Translate(Vector3.down * Time.deltaTime * 2f); // Move the brick downwards.
+            yield return new WaitForFixedUpdate(); 
         }
 
-        isFalling = false;
+        isFalling = false; 
     }
 }

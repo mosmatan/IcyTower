@@ -15,7 +15,7 @@ public class BrickManager : MonoBehaviour
     [SerializeField] private float offsetUnder; // Offset for positioning bricks.
     [SerializeField] private int boundries; // Boundary for positioning.
 
-    private int changeLevel; 
+    private int changeLevel; // Change level for sprite updates.
     private IRelativePositionManager positionManager;
 
     private void Awake()
@@ -37,24 +37,25 @@ public class BrickManager : MonoBehaviour
     private void Update()
     {
         positionManager.MoveObject(); // Update brick positions.
-        EnableCollidersBasedOnPosition();
+        EnableCollidersBasedOnPosition(); 
     }
 
     private void setPositionManager()
     {
         // Initialize the position manager with the list of bricks.
         positionManager = new JumperRelativePositionManager(bricks.ConvertAll(brick => brick.gameObject));
-        positionManager.Boundries = boundries;
+        positionManager.Boundries = boundries; 
         positionManager.NextObjectDelta = nextObjectHeight;
-        positionManager.MoveOffset = offsetUnder;
-        positionManager.MovedObject += PositionManager_OnMovedObject;
+        positionManager.MoveOffset = offsetUnder; 
+        positionManager.MovedObject += PositionManager_OnMovedObject; 
     }
 
     private void PositionManager_OnMovedObject(GameObject obj)
     {
+        // Adjust the position of the moved brick based on its last position.
         obj.TryGetComponent(out Brick brick);
         obj.transform.position = new Vector3(obj.transform.position.x, brick.LastPosition.y + nextObjectHeight, obj.transform.position.z);
-        brick.HandlePositionChange();
+        brick.HandlePositionChange(); // Notify the brick of its position change.
     }
 
     private void DisableAllColliders()
@@ -65,6 +66,7 @@ public class BrickManager : MonoBehaviour
         }
     }
 
+    // Enable/disable colliders based on jumper position.
     private void EnableCollidersBasedOnPosition()
     {
         foreach (Brick brick in bricks)
@@ -72,11 +74,11 @@ public class BrickManager : MonoBehaviour
             // Enable collider if brick is in the correct position.
             if (jumper.MinBoundaryY >= brick.Collider.bounds.max.y)
             {
-                brick.SetActiveCollider(true);
+                brick.SetActiveCollider(true); // Activate collider.
             }
             else if (jumper.MinBoundaryY < brick.Collider.bounds.max.y - 0.6f)
             {
-                brick.SetActiveCollider(false);
+                brick.SetActiveCollider(false); // Deactivate collider.
             }
         }
     }
@@ -84,6 +86,6 @@ public class BrickManager : MonoBehaviour
     private void Brick_PositionChanged(Brick sender, int times)
     {
         // Change the sprite of the brick based on the number of times its position has changed.
-        sender.Sprite = sprites[(times / (changeLevel / 10)) % sprites.Count];
+        sender.Sprite = sprites[(times / (changeLevel / 10)) % sprites.Count]; // Update brick sprite.
     }
 }

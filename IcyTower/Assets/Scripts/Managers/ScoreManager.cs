@@ -57,6 +57,7 @@ public class ScoreManager : IScoreManager
         scoreUI.text = $"Score: {score}"; // Update score display.
     }
 
+    // Additional score for super jumping booster.
     public void AddScoreBoost(int scoreBoost)
     {
         score += scoreBoost;

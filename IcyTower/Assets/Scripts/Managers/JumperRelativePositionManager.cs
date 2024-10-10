@@ -8,10 +8,7 @@ using UnityEngine;
 /// </summary>
 public class JumperRelativePositionManager : IRelativePositionManager
 {
-    //private Queue<GameObject> objects = new Queue<GameObject>(); // Queue of objects to manage.
     private IJumper jumper; // Reference to the jumper interface.
-    //private GameObject currentObject; // Currently moving object.
-
     public event Action<GameObject> MovedObject; // Event triggered when an object is moved.
 
     private List<GameObject> objectsList; 
@@ -28,8 +25,6 @@ public class JumperRelativePositionManager : IRelativePositionManager
     private void initialize()
     {
         jumper = GameObject.FindAnyObjectByType<IJumper>(); // Find the jumper in the scene.
-        //listToQueue(); 
-        //currentObject = objects.Dequeue(); // Set the first object as the current object.
     }
 
     public void MoveObject()
@@ -42,18 +37,7 @@ public class JumperRelativePositionManager : IRelativePositionManager
                 float xPosition = UnityEngine.Random.Range(-Boundries, Boundries);
                 item.transform.position = new Vector3(xPosition, item.transform.position.y + NextObjectDelta, item.transform.position.z);
                 OnMovedObject(item); // Trigger the moved object event.
-                //objects.Enqueue(currentObject); // Add the current object back to the queue.
-                //currentObject = objects.Dequeue(); // Update the current object to the next in the queue.
             }
-        }
-    }
-
-    private void listToQueue()
-    {
-        // Enqueue all objects from the list.
-        foreach (var brick in objectsList)
-        {
-            //objects.Enqueue(brick);
         }
     }
 
