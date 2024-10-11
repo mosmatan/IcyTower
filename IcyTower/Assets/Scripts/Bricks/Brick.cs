@@ -108,7 +108,6 @@ public class Brick : MonoBehaviour
 
     private void handleShake()
     {
-        Debug.Log($"TextBrick Value: {textBrick.Value}, BigBrick: {bigBrick}");
         // Big brick will not shake and fall. 
         if (!isShaking)
         {
@@ -122,17 +121,14 @@ public class Brick : MonoBehaviour
 
     private IEnumerator startShake()
     {
-        Debug.Log("shake");
         yield return new WaitForSeconds(holdShake); // Wait before starting shake.
         animator.SetTrigger("StartShake"); // Trigger shake animation.
         yield return new WaitForSeconds(holdShake); // Wait for shake duration.
-        Debug.Log("after shake before fall");
         StartCoroutine(falling()); // Start falling coroutine.
     }
 
     private IEnumerator falling()
     {
-        Debug.Log("fall");
         isFalling = true; 
         collider.enabled = false; // Disable collider during fall.
 
