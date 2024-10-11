@@ -1736,6 +1736,10 @@ PrefabInstance:
       propertyPath: textBrick
       value: 
       objectReference: {fileID: 1051907833}
+    - target: {fileID: 6714980893303971966, guid: 7d161eaec30a35649b4bcedf7d7851ad, type: 3}
+      propertyPath: isTextBrick
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 1673822782629258755, guid: 7d161eaec30a35649b4bcedf7d7851ad, type: 3}
     - {fileID: 5454308017271541067, guid: 7d161eaec30a35649b4bcedf7d7851ad, type: 3}
@@ -5309,6 +5313,10 @@ PrefabInstance:
       propertyPath: textBrick
       value: 
       objectReference: {fileID: 1051907833}
+    - target: {fileID: 5188263674495245375, guid: 65ca26d768ebbaf46bb9d6430dda726a, type: 3}
+      propertyPath: isTextBrick
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7051888332443808884, guid: 65ca26d768ebbaf46bb9d6430dda726a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2.5
